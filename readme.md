@@ -69,7 +69,7 @@ $ jest -watch --coverage <filename/pattern>
 
 > La documentación del CLI de Jest puede encontrarse en [este enlace][CLI]
 
-## 2. Conficuración básica de Jest
+## 2. Configuración básica de Jest
 
 Jest se configura mediante un archivo de [configuración] con el nombre `jest.config.js` que se encuentra en el directorio raíz del componente.
 
@@ -147,7 +147,7 @@ module.exports = {
 
 Cuando se ejecuta un test se pueden visualizar los resultados en la terminal y hay que saber interpretar los datos que se aparecen.
 
-```bash
+```sh
 > test-course@1.0.0 unit /.../front:ux/test-course
 > jest --coverage
 
