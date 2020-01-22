@@ -36,7 +36,7 @@ Además, si queremos lanzar los tests sobre componentes de *Vue.js* debemos tene
 $ npm install --save-dev vue-test-utils
 ```
 
-## 2. Comandos básicos de Jest
+## 1. Comandos básicos de Jest
 
 A la hora de lanzar los tests desde el terminal, [Jest] ofrece un [CLI] con una serie de comandos y opciones para ello.
 
@@ -69,7 +69,7 @@ $ jest -watch --coverage <filename/pattern>
 
 > La documentación del CLI de Jest puede encontrarse en [este enlace][CLI]
 
-## 3. Conficuración básica de Jest
+## 2. Conficuración básica de Jest
 
 Jest se configura mediante un archivo de [configuración] con el nombre `jest.config.js` que se encuentra en el directorio raíz del componente.
 
@@ -276,7 +276,7 @@ describe('Multiply function test cases', () => {
 
 > La documentación del método `test()` puede encontrarse en [este enlace][test]
 
-### 5. Método `expect()` y sus funciones
+## 5. Método `expect()` y sus funciones
 
 Para definir las expectativas que tenemos acerca del comportamiento de una función se hace uso del método `expect()`. Generalmente invocamos a la función que tenemos que testear en diferentes escenarios y con diferentes argumentos y condiciones, y **esperamos** que el resultado sea uno.
 
