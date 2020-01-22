@@ -1,0 +1,12 @@
+indice:
+
+- Instalación
+- Comandos
+- Archivo de configuración
+- API de jest
+  - Describe
+  - Test
+  - Expect
+    - toBe y demás
+    - mocks y toHaveBeenCalled
+  - BeforeEach

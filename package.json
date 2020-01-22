@@ -1,0 +1,29 @@
+{
+  "name": "test-course",
+  "version": "1.0.0",
+  "description": "Onesait Frontend Development - Testing with Vue and Jest Course",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "unit": "jest --coverage",
+    "unit:only": "jest",
+    "unit:watch": "jest --watch --coverage"
+  },
+  "keywords": [
+    "onesait",
+    "test",
+    "jest",
+    "vue"
+  ],
+  "author": "Pedro Rodriguez Alia & Rafael Cachos Calvo",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.8.3",
+    "@babel/preset-env": "^7.8.3",
+    "babel-jest": "^24.9.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "jest": "^24.9.0",
+    "prettier": "1.19.1"
+  },
+  "dependencies": {}
+}
