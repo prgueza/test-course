@@ -43,8 +43,10 @@ A la hora de lanzar los tests desde el terminal, [Jest] ofrece un [CLI] con una 
 ```bash
 # Run tests
 $ jest <filename/pattern> # Jest ods-btn
+
 # Run tests and collect coverage
 $ jest --coverage <filename/pattern>
+
 # Run tests and watch for changes
 $ jest -watch --coverage <filename/pattern>
 ```
@@ -53,7 +55,7 @@ $ jest -watch --coverage <filename/pattern>
 
  Es recomendable dar de alta estos comandos en el `package.json` de nuestro proyecto mediante un alias para tenerlos más accesibles:
 
- ```json
+ ```javascript
  {
    ...,
    "scripts": {
