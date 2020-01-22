@@ -51,9 +51,23 @@ $ jest -watch --coverage <filename/pattern>
 
  Si no se especifica se lanzarán todos los tests que encuentre jest dentro de nuestro proyecto. No es necesario especificar el archivo que se quiere testear, pero puede resultar útil si queremos testear un único componente.
 
+ Es recomendable dar de alta estos comandos en el `package.json` de nuestro proyecto mediante un alias para tenerlos más accesibles:
+
+ ```json
+ {
+   ...,
+   "scripts": {
+     ...,
+     "unit": "jest --coverage",
+     "unit:only": "jest",
+     "unit:watch": "jest --watch --coverage"
+   },
+ }
+ ```
+
 > La documentación del CLI de Jest puede encontrarse en [este enlace][CLI]
 
-## 3. Conficuración básica de Jest
+## 3. Conficuración básica de Jest
 
 Jest se configura mediante un archivo de [configuración] con el nombre `jest.config.js` que se encuentra en el directorio raíz del componente.
 
