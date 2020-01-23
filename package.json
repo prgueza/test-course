@@ -4,7 +4,6 @@
   "description": "Onesait Frontend Development - Testing with Vue and Jest Course",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
     "unit": "jest --coverage",
     "unit:only": "jest",
     "unit:watch": "jest --watch --coverage"

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1579779403900" clover="3.2.0">
-  <project timestamp="1579779403900" name="All files">
+<coverage generated="1579794324264" clover="3.2.0">
+  <project timestamp="1579794324264" name="All files">
     <metrics statements="14" coveredstatements="3" conditionals="12" coveredconditionals="1" methods="11" coveredmethods="3" elements="37" coveredelements="7" complexity="0" loc="14" ncloc="14" packages="2" files="2" classes="2"/>
     <package name="components.Button">
       <metrics statements="5" coveredstatements="3" conditionals="2" coveredconditionals="1" methods="4" coveredmethods="3"/>
       <file name="Button.vue" path="/Users/pedro/Code/front:ux/test-course/src/components/Button/Button.vue">
         <metrics statements="5" coveredstatements="3" conditionals="2" coveredconditionals="1" methods="4" coveredmethods="3"/>
-        <line num="14" count="2" type="stmt"/>
-        <line num="22" count="2" type="stmt"/>
-        <line num="29" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="29" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="35" count="0" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
       </file>

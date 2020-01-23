@@ -1,20 +1,44 @@
-// import Vue from 'vue'
-import { shallowMount } from '@vue/test-utils'
-import Button from './Button.vue'
+import Vue from 'vue'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
+import Button from './Button'
 
-describe('Test Button.vue', () => {
-  beforeEach(() => {
-    jest.resetAllMocks()
+describe('Button test suite', () => {
+
+  /* TEMPLATE RELATED TESTS */
+  describe('Template rendering', () => {
+    // ...
   })
-  describe('test Props',() => {
-    test('default size', async () => {
-      const wrapper = shallowMount(Button)
-      expect(wrapper.vm.size).toEqual('default')
-    })
-    test('label Empty', async () => {
-      const wrapper = shallowMount(Button)
-      expect(wrapper.vm.size).toBeFalsy()
-    })
+
+  /* DATA RELATED TESTS */
+  describe('Data and Props', () => {
+    // ...
   })
+
+  /* COMPUTED PROPERTIES RELATED TESTS */
+  describe('Computed properties', () => {
+    describe('Computed property A', () => {
+      test('', () => {  
+        const wrapper = shallowMount(Button)
+        expect(wrapper.customClass).toBeUndefined()
+      })
+    })
+    // ...
+  })
+
+  /* METHODS RELATED TESTS */
+  describe('Methods', () => {
+    describe('Method A', () => {
+      // ..
+    })
+    // ...
+  })
+
+  /* LIFECYCLE HOOKS RELATED TESTS */
+  describe('Lifecycle hooks', () => {
+    describe('Created hook', () => {
+      // ...
+    })
+    // ...
+  })
+
 })
-
