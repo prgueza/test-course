@@ -1,19 +1,19 @@
 const path = require('path')
 
-console.log(path.resolve(__dirname))
-
 module.exports = {
   rootDir: 'src',
-  moduleFileExtensions: ['js'],
+  moduleFileExtensions: ['js', 'json', 'vue'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
   },
   transform: {
-    '^.+\\.js$': path.resolve(__dirname, 'node_modules/babel-jest'),
+    '^.+\\.js$': 'babel-jest',
+    '.*\\.(vue)$': 'vue-jest',
   },
   testRegex: '\\.spec\\.js$',
   testPathIgnorePatterns: [ 'functions' ],
   coverageDirectory: path.resolve(__dirname, 'reports/unit/coverage'),
-  collectCoverageFrom: ['**/*.js', '!**/node_modules/*x*', '!functions/**/*.js'],
+  collectCoverageFrom: ['**/*.{js,vue}', '!**/node_modules/**', '!functions/**/*.js'],
   verbose: true,
+  // setupFiles: ['<rootDir>/test/unit/setup']
 }
