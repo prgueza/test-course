@@ -35,12 +35,14 @@ $ cd ods-test-course && npm install
 
 
 ```bash
-  # Run tests and collect coverage from all files
-  $ npm run unit <component>
-  # Just run tests (faster than the previous command)
-  $ npm run unit:only <component>
-  # Run tests and collect coverage, and watch for changes
-  $ npm run unit:watch <component>
+# Run tests and collect coverage from all files
+$ npm run unit <component>
+
+# Just run tests (faster than the previous command)
+$ npm run unit:only <component>
+
+# Run tests and collect coverage, and watch for changes
+$ npm run unit:watch <component>
 ```
 
 ## Documentación
@@ -48,8 +50,6 @@ $ cd ods-test-course && npm install
 * [Documentación oficial de Jest][Jest]
 * [Documentación oficial de las Vue Test Utils][vue-test-utils]
 * [Vue Testing Handbook](https://lmiller1990.github.io/vue-testing-handbook/)
-
----
 
 [Jest]: https://jestjs.io/en/
 [CLI]: https://jestjs.io/docs/en/cli
