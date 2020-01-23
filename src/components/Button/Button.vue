@@ -1,5 +1,5 @@
 <template lang="pug">
-  button.c-button(ref="c-button" :class="customClass" @click="handleClick")
+  button.c-button(ref="c-button", :class="customClass", @click="handleClick")
     | {{ label }}
 </template>
 
@@ -33,7 +33,7 @@ export default {
   methods: {
     handleClick () {
       this.counter++
-      this.$emit('click', 'button clicked!!!')
+      this.$emit('click', 'button clicked!')
     }
   }
 }
