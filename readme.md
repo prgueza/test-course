@@ -29,11 +29,11 @@ $ npm install --save-dev jest babel-jest
 $ npm install --global jest
 ```
 
-Además, si queremos lanzar los tests sobre componentes de *Vue.js* debemos tener instalado el paquete [@vue/test-utils].
+Además, si queremos lanzar los tests sobre componentes de *Vue.js* debemos tener instalado el paquete [@vue/test-utils] y el paquete [jsdom].
 
 ```bash
 # Install vue test utils
-$ npm install --save-dev vue-test-utils
+$ npm install --save-dev @vue/test-utils vue-jest jsdom jsdom-global
 ```
 
 ## 1. Comandos básicos de Jest
@@ -571,3 +571,4 @@ jest.fn().mockRestore()
 [toHaveBeenCalled]: https://jestjs.io/docs/en/expect#tohavebeencalled
 [toHaveBeenCalledWith]: https://jestjs.io/docs/en/expect#tohavebeencalledwitharg1-arg2
 [mockImplementation]: https://jestjs.io/docs/en/mock-function-api#mockfnmockimplementationfn
+[jsdom]: https://github.com/jsdom/jsdom
