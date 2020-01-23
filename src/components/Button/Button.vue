@@ -1,5 +1,5 @@
 <template lang="pug">
-  button.c-button(:class="customClass" @click="handleClick")
+  button.c-button(ref="c-button" :class="customClass" @click="handleClick")
     | {{ label }}
 </template>
 
@@ -10,8 +10,8 @@ export default {
   props: {
     size: {
       type: String,
-      default: 'default',
-      validator: (value) => ['default', 'small', 'medium', 'big'].includes(value)
+      default: '',
+      validator: (value) => ['', 'small', 'medium', 'big'].includes(value)
     },
     label: {
       type: String
@@ -25,8 +25,8 @@ export default {
   },
 
   computed: {
-    customClass() {
-      return this.size !== 'default' ? `c-button--${this.size}` : ''
+    customClass () {
+      return this.size ? `c-button--${this.size}` : ''
     }
   },
 

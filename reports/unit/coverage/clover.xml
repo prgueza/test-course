@@ -15,7 +15,7 @@
     </package>
     <package name="examples">
       <metrics statements="9" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="7" coveredmethods="0"/>
-      <file name="examples.js" path="/Users/pedro/Code/front:ux/test-course/src/examples/examples.js">
+      <file name="examples.js" path="/Users/rafaelcachoscalvo/Documents/testing/test-course/src/examples/examples.js">
         <metrics statements="9" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="2" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="3" count="0" type="stmt"/>
