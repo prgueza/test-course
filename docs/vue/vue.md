@@ -1,7 +1,54 @@
 # Vue Test Utils
 
----------
-## 3. Métodos `mount()` y `shallowMount()`
+## Instalación
+
+Si hemos inicializado nuestro proyecto utlizando el cli de Vue debería ser suficiente con instalar el paquete y extender nuestro proyecto haciendo uso de los comandos que  nos ofrece:
+
+```bash
+$ npm install --save-dev @vue/test-utils
+$ vue add @vue/unit-jest
+```
+
+> Si esto da problemas se pueden seguir las [instrucciones] de la documentación oficial de Vue Test Utils.
+
+## Configuración avanzada de Jest
+
+También es necesario añadir una serie de modificaciones en el archivo de configuración de [Jest] para que interprete correctamente nuestros tests y sea capaz de probar los componentes cuando son *Single File Components*.
+
+```diff
+  module.exports = {
+    rootDir: 'src',
+-   moduleFileExtensions: ['js'],
++   moduleFileExtensions: ['js', 'vue'],
+    moduleNameMapper: {
+      '^@/(.*)$': '<rootDir>/$1',
+    },
+    transform: {
+      '^.+\\.js$': 'babel-jest',
++     '.*\\.(vue)$': 'vue-jest',
+    },
+    testRegex: '\\.spec\\.js$',
+    testPathIgnorePatterns: [ 'functions' ],
+    coverageDirectory: path.resolve(__dirname, 'reports/unit/coverage'),
+-   collectCoverageFrom: ['**/*.js', '!**/node_modules/**', '!functions/**/*.js'],
++   collectCoverageFrom: ['**/*.{js,vue}', '!**/node_modules/**', '!functions/**/*.js'],
+    verbose: true,
+  }
+```
+
+* `moduleFileExtensions`
+
+  Debemos añadir la extensión `.vue` para que [Jest] lance también los tests relacionados con los archivos de nuestros componentes.
+
+* `transform`
+
+  Para que [Jest] sea capaz de interpretar el código escrito en los componentes es necesario que [vue-jest] transpile estos archivos.
+
+* `collectCoverageFrom`
+
+  Debemos añadir también la extensión `.vue` a la expresión que utiliza [Jest] para determinar la cobertura, de manera que nuestros componentes sean analizados.
+
+## Métodos `mount()` y `shallowMount()`
 ### Mount
 Crea un Wrapper que contiene el componente Vue montado y renderizado.
 
@@ -80,6 +127,7 @@ expect(wrapper.vm.$route.path).toBe($route.path)
 [Jest]: https://jestjs.io/en/
 [CLI]: https://jestjs.io/docs/en/cli
 [@vue/test-utils]: https://github.com/vuejs/vue-test-utils
+[vue-jest]: https://github.com/vuejs/vue-jest
 [configuración]: https://jestjs.io/docs/en/configuration
 [Babel]: https://babeljs.io/
 [babel-jest]: https://www.npmjs.com/package/babel-jest
@@ -94,3 +142,4 @@ expect(wrapper.vm.$route.path).toBe($route.path)
 [jsdom]: https://github.com/jsdom/jsdom
 [vue mount]: https://vue-test-utils.vuejs.org/api/mount.html
 [vue shallowMount]: https://vue-test-utils.vuejs.org/api/shallowMount.html
+[instrucciones]: https://vue-test-utils.vuejs.org/guides/testing-single-file-components-with-jest.html

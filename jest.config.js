@@ -15,5 +15,4 @@ module.exports = {
   coverageDirectory: path.resolve(__dirname, 'reports/unit/coverage'),
   collectCoverageFrom: ['**/*.{js,vue}', '!**/node_modules/**', '!functions/**/*.js'],
   verbose: true,
-  // setupFiles: ['<rootDir>/test/unit/setup']
 }

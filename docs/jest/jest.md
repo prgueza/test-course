@@ -70,7 +70,7 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/$1',
   },
   transform: {
-    '^.+\\.js$': path.resolve(__dirname, 'node_modules/babel-jest'),
+    '^.+\\.js$': 'babel-jest',
   },
   testRegex: '\\.spec\\.js$',
   testPathIgnorePatterns: [ 'ignore' ],
