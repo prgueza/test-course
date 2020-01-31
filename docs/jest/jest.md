@@ -92,7 +92,7 @@ module.exports = {
 
   > Podemos referenciar esta ruta en el archivo de configuración usando `<rootDir>`.
 
-- `moduleNameMapper`
+- `moduleFileExtensions`
 
   Array con las extensiónes de los archivos de nuestro proyecto. En este caso se especifica que se lanzen tests únicamente para archivos con extensión `.js`.
 

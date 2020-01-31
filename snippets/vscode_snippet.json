@@ -1,0 +1,47 @@
+{
+  "Vue Component - Test Cases": {
+    "prefix": ["test"],
+    "description": "Vue Test Skeleton",
+    "body": [
+      "import Vue from 'vue'",
+      "import { shallowMount, createLocalVue } from '@vue/test-utils'",
+      "import ${1:Component} from './${1:Component}'",
+      "",
+      "describe('${1:Component} test suite', () => {",
+      "",
+      "\t$BLOCK_COMMENT_START TEMPLATE RELATED TESTS $BLOCK_COMMENT_END",
+      "\tdescribe('Template rendering', () => {",
+      "\t\t$LINE_COMMENT ...",
+      "\t})"
+      "",
+      "\t$BLOCK_COMMENT_START DATA RELATED TESTS $BLOCK_COMMENT_END",
+      "\tdescribe('Data and Props', () => {",
+      "\t\t$LINE_COMMENT ...",
+      "\t})"
+      "",
+      "\t$BLOCK_COMMENT_START COMPUTED PROPERTIES RELATED TESTS $BLOCK_COMMENT_END",
+      "\tdescribe('Computed properties', () => {",
+      "\t\tdescribe('Computed property A', () => {",
+      "\t\t\t$LINE_COMMENT ...",
+      "\t\t})",
+      "\t\t$LINE_COMMENT ...",
+      "\t})",
+      "\t$BLOCK_COMMENT_START LIFECYCLE HOOKS RELATED TESTS $BLOCK_COMMENT_END",
+      "\tdescribe('Lifecycle hooks', () => {",
+      "\t\tdescribe('Created hook', () => {",
+      "\t\t\t$LINE_COMMENT ...",
+      "\t\t})",
+      "\t\t$LINE_COMMENT ...",
+      "\t})",
+      "\t$BLOCK_COMMENT_START METHODS RELATED TESTS $BLOCK_COMMENT_END",
+      "\tdescribe('Methods', () => {",
+      "\t\tdescribe('Method A', () => {",
+      "\t\t\t$LINE_COMMENT ...",
+      "\t\t})",
+      "\t\t$LINE_COMMENT ...",
+      "\t})",
+      "",
+      "})"
+    ],
+  }
+}

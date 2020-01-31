@@ -1,0 +1,46 @@
+'.source.js':
+  'Test Skeleton':
+    'prefix': 'test'
+    'body': '''
+      import Vue from 'vue'
+      import { shallowMount, createLocalVue } from '@vue/test-utils'
+      import ${1:Component} from './${1:Component}'
+
+      describe('${1:Component} test suite', () => {
+
+        /* TEMPLATE RELATED TESTS */
+        describe('Template rendering', () => {
+          // ...
+        })
+
+        /* DATA RELATED TESTS */
+        describe('Data and Props', () => {
+          // ...
+        })
+
+        /* COMPUTED PROPERTIES RELATED TESTS */
+        describe('Computed properties', () => {
+          describe('Computed property A', () => {
+            // ...
+          })
+          // ...
+        })
+
+        /* LIFECYCLE HOOKS RELATED TESTS */
+        describe('Lifecycle hooks', () => {
+          describe('Created hook', () => {
+            // ...
+          })
+          // ...
+        })
+
+        /* METHODS RELATED TESTS */
+        describe('Methods', () => {
+          describe('Method A', () => {
+            // ..
+          })
+          // ...
+        })
+
+      })
+    '''
