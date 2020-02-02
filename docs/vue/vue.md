@@ -306,8 +306,331 @@ Para setear si el componente puede atacar al DOM en el momento de montarlo.
 Cuando se activa atacar al DOM, se debe llamar a `wrapper.destroy()` al terminar el test para eliminar los elementos del DOM renderizados y la instancia del componente.
 
 ####resto de propiedades
-Hay más propiedades para configurar el componente en el momento del montado para poder verlas todas accede a la sección de propiedades en la docuentación de vue-test-util desde este 
+Hay más propiedades para configurar el componente en el momento del montado para poder verlas todas accede a la sección de propiedades en la docuentación de vue-test-util desde este
 [enlace][mounting options].
+
+##wrapper
+`Wrapper` es un objeto que contiene un componente montado o un vnode con sus metodos para testear el componente o el vnode.
+
+###Propiedades
+
+####vm
+`Component` (solo lectura): es la instancía de `Vue`. Se puede acceder a todos los metodos y porpiedades de la instancia con `wrapper.vm`. Esta instancia solo existe en el wrapper del componente Vue.
+
+####element
+`HTMLElement` (solo lectura): el nodo DOM raiz del wrapper.
+
+###Metodos
+
+####attributes
+Devuelve los atributos del nodo del DOM del `wrapper`. Si  se le pasa como parametro la `key` de un atributo devolvera el valor de ese atributo.
+* Argumentos:
+  * `{string} key` optional
+* devuelve: `{[attribute: string]: any} | string`
+
+```javascript
+import { mount } from '@vue/test-utils'
+import Foo from './Foo.vue'
+
+const wrapper = mount(Foo)
+expect(wrapper.attributes().id).toBe('foo')
+expect(wrapper.attributes('id')).toBe('foo')
+```
+####classes
+Devuelve las clases del nodo del DOM del `wrapper`.
+Devuelve un array de clases si no se le pasa parametro y si se le pasa un string como parametro devueve true o false si esté esta entre las clases que contiene el DOM.
+
+* Argumentos:
+  * `{string} className` optional
+* Devuelve: `Array<{string}> | boolean`
+
+```javascript
+import { mount } from '@vue/test-utils'
+import Foo from './Foo.vue'
+
+const wrapper = mount(Foo)
+expect(wrapper.classes()).toContain('bar')
+expect(wrapper.classes('bar')).toBe(true)
+```
+
+####contains
+Devuelve si el `wrapper` contiene o no el elemento buscado por el [selector][selector] especificado.
+
+* Argumentos:
+  * `{string|Component}`selector
+* Devuelve: `{boolean}`
+
+```javascript
+import { mount } from '@vue/test-utils'
+import Foo from './Foo.vue'
+import Bar from './Bar.vue'
+
+const wrapper = mount(Foo)
+expect(wrapper.contains('p')).toBe(true)
+expect(wrapper.contains(Bar)).toBe(true)
+```
+####emitted
+Devuelve un objeto que contiene los eventos personalizados emitidos por `wrapper` `vm`.
+* Devuelve: `{ [name: string]: Array<Array<any>> }`
+```javascript
+import { mount } from '@vue/test-utils'
+
+test('emit demo', async () => {
+  const wrapper = mount(Component)
+
+  wrapper.vm.$emit('foo')
+  wrapper.vm.$emit('foo', 123)
+
+  await wrapper.vm.$nextTick() // Wait until $emits have been handled
+
+  /*
+  wrapper.emitted() returns the following object:
+  {
+    foo: [[], [123]]
+  }
+  */
+
+  // assert event has been emitted
+  expect(wrapper.emitted().foo).toBeTruthy()
+
+  // assert event count
+  expect(wrapper.emitted().foo.length).toBe(2)
+
+  // assert event payload
+  expect(wrapper.emitted().foo[1]).toEqual([123])
+})
+```
+También se puede escribir así.
+```javascript
+// assert event has been emitted
+expect(wrapper.emitted('foo')).toBeTruthy()
+
+// assert event count
+expect(wrapper.emitted('foo').length).toBe(2)
+
+// assert event payload
+expect(wrapper.emitted('foo')[1]).toEqual([123])
+```
+El método `.emitted()` devuelve el mismo objeto cada vez que se llama, no uno nuevo, por lo que el objeto se actualizará únicamente cuando se activen nuevos eventos.
+
+####emittedByOrder
+Devuelve un array que contiene los eventos personalizados emitidos por `wrapper` `vm`.
+
+* Devuelve: `Array<{ name: string, args: Array<any> }>`
+
+```javascript
+import { mount } from '@vue/test-utils'
+
+const wrapper = mount(Component)
+
+wrapper.vm.$emit('foo')
+wrapper.vm.$emit('bar', 123)
+
+/*
+wrapper.emittedByOrder() returns the following Array:
+[
+  { name: 'foo', args: [] },
+  { name: 'bar', args: [123] }
+]
+*/
+
+// assert event emit order
+expect(wrapper.emittedByOrder().map(e => e.name)).toEqual(['foo', 'bar'])
+```
+
+####exists
+Devuelve si el `Wrapper` o el `WrapperArray` existe.
+* devuelve: `{boolean}`
+
+```javascript
+import { mount } from '@vue/test-utils'
+import Foo from './Foo.vue'
+
+const wrapper = mount(Foo)
+expect(wrapper.exists()).toBe(true)
+expect(wrapper.find('does-not-exist').exists()).toBe(false)
+expect(wrapper.findAll('div').exists()).toBe(true)
+expect(wrapper.findAll('does-not-exist').exists()).toBe(false)
+```
+
+####find
+Devuelve el 'Wrapper' del primer elemento del DOM o componente Vue que coincide con el [selector][selector] pasado como parametro.
+
+* Argumentos:
+  * `{string|Component}` selector
+* Devuelve: `{Wrapper}`
+
+```javascript
+import { mount } from '@vue/test-utils'
+import Foo from './Foo.vue'
+import Bar from './Bar.vue'
+
+const wrapper = mount(Foo)
+
+const div = wrapper.find('div')
+expect(div.is('div')).toBe(true)
+
+const bar = wrapper.find(Bar)
+expect(bar.is(Bar)).toBe(true)
+
+const barByName = wrapper.find({ name: 'bar' })
+expect(barByName.is(Bar)).toBe(true)
+
+const fooRef = wrapper.find({ ref: 'foo' })
+expect(fooRef.is(Foo)).toBe(true)
+```
+
+####findAll
+Devuelve el [`WrapperArray`][WrapperArray] de los elementos que coinciden con el [selector][selector] pasado como parametro.
+* Argumentos:
+  * `{string|Component}` selector
+* Devuelve: `{WrapperArray}`
+
+```javascript
+import { mount } from '@vue/test-utils'
+import Foo from './Foo.vue'
+import Bar from './Bar.vue'
+
+const wrapper = mount(Foo)
+const div = wrapper.findAll('div').at(0)
+expect(div.is('div')).toBe(true)
+const bar = wrapper.findAll(Bar).at(0)
+expect(bar.is(Bar)).toBe(true)
+```
+####isEmpty
+Devuelve true si el `Wrapper` no contiene hijos.
+* Devuelve: `{boolean}`
+
+```javascript
+import { mount } from '@vue/test-utils'
+import Foo from './Foo.vue'
+
+const wrapper = mount(Foo)
+expect(wrapper.isEmpty()).toBe(true)
+```
+####isVisible
+Devuelve true si el 'Wrapper' es visible.
+Comprueba tambien que los elementos ancestros no tengan ni 'display: none' ni 'visibility: hidden' para chequear que el 'Wrapper' es visible.
+Es útil para comprobar que se esta apliacando la directiva v-show en componentes.
+
+```javascript
+import { mount } from '@vue/test-utils'
+import Foo from './Foo.vue'
+
+const wrapper = mount(Foo)
+expect(wrapper.isVisible()).toBe(true)
+expect(wrapper.find('.is-not-visible').isVisible()).toBe(false)
+```
+####setData
+Setea a `Wrapper` `vm` data.
+`setData` usa internamente `Vue.set`
+* Argumentos:
+  * `{Object}` data
+
+```javascript
+import { mount } from '@vue/test-utils'
+import Foo from './Foo.vue'
+
+const wrapper = mount(Foo)
+wrapper.setData({ foo: 'bar' })
+expect(wrapper.vm.foo).toBe('bar')
+```
+
+####setMethods
+Crea o sobrescribe metodos y fuerza su actualización en `Wrapper` `vn`.
+
+* Arguments:
+  * `{Object}` methods
+
+```javascript
+import { mount } from '@vue/test-utils'
+import sinon from 'sinon'
+import Foo from './Foo.vue'
+
+const wrapper = mount(Foo)
+const clickMethodStub = sinon.stub()
+
+wrapper.setMethods({ clickMethod: clickMethodStub })
+wrapper.find('button').trigger('click')
+expect(clickMethodStub.called).toBe(true)
+```
+####setProps
+Setea propiedeades y fuerza su actualización en `Wrapper` `vn`.
+
+```javascript
+import { mount } from '@vue/test-utils'
+import Foo from './Foo.vue'
+
+const wrapper = mount(Foo)
+wrapper.setProps({ foo: 'bar' })
+expect(wrapper.vm.foo).toBe('bar')
+```
+
+####setValue
+Setea el valor de un input text o seleciona un elemento y actualiza el data asociado al v-model.
+
+* Argumentos:
+  * `{any}` value
+
+```javascript
+import { mount } from '@vue/test-utils'
+import Foo from './Foo.vue'
+
+const wrapper = mount(Foo)
+
+const textInput = wrapper.find('input[type="text"]')
+textInput.setValue('some value')
+
+const select = wrapper.find('select')
+select.setValue('option value')
+```
+Ver tambien [setChecked][setChecked], [setSelected][setSelected].
+
+####text
+Devuelve el contenido de texto del `Wrapper`.
+
+* Devuelve: `{string}`
+
+```javascript
+import { mount } from '@vue/test-utils'
+import Foo from './Foo.vue'
+
+const wrapper = mount(Foo)
+expect(wrapper.text()).toBe('bar')
+```
+####trigger
+Lanza un evento asincrono del `Wrapper` DOM node.
+
+* Argumentos:
+  * `{string} eventType` requerido
+  * `{Object} options` optional
+
+```javascript
+import { mount } from '@vue/test-utils'
+import sinon from 'sinon'
+import Foo from './Foo'
+
+test('trigger demo', async () => {
+  const clickHandler = sinon.stub()
+  const wrapper = mount(Foo, {
+    propsData: { clickHandler }
+  })
+
+  wrapper.trigger('click')
+
+  wrapper.trigger('click', {
+    button: 0
+  })
+
+  wrapper.trigger('click', {
+    ctrlKey: true // For testing @click.ctrl handlers
+  })
+
+  await wrapper.vm.$nextTick() // Wait until trigger events have been handled
+
+  expect(clickHandler.called).toBe(true)
+})
+```
 
 [jest]: https://jestjs.io/en/
 
@@ -350,3 +673,11 @@ Hay más propiedades para configurar el componente en el momento del montado par
 [createLocalVue]: https://vue-test-utils.vuejs.org/api/createLocalVue.html
 
 [mounting options]: https://vue-test-utils.vuejs.org/api/options.html
+
+[selector]: https://vue-test-utils.vuejs.org/api/selectors.html
+
+[WrapperArray]: https://vue-test-utils.vuejs.org/api/wrapper-array/
+
+[setChecked]: https://vue-test-utils.vuejs.org/api/wrapper/#setchecked
+
+[setSelected]: https://vue-test-utils.vuejs.org/api/wrapper/#setselected
