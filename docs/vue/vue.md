@@ -168,9 +168,9 @@ test('renders a button', () => {
 
 > Puede encontrar más ejemplos y documentación más detallada del metodo  `shallowMount()` en [este enlace][vue shallowmount].
 
-###Principales Opciones
+### Principales Opciones
 Opciones par mount y shallowMount
-####propsData
+#### propsData
 Setea las props del componente al montarlo.
 
 ```javascript
@@ -186,7 +186,7 @@ const wrapper = mount(Component, {
 expect(wrapper.text()).toBe('aBC')
 ```
 
-####mocks
+#### mocks
 Agregue propiedades adicionales a la instancia. Útil para reemplazar metodos globales que en el momento del test no queramos que ejecuten el verdadero codigo. Tambien es útil para reemplazar metedos globlaes por otras funciones o por jest.fn que luengo espiemos para comprobar que estos se han llamado en nuestro código pero sin ejecutar el verdaderó código. Por ejemplo aquí podriamos reemplazar el i18n para que devuela un texto, el \$route para las rutas o el \$emit por un jest.fn para comprobar que es llamado y con que parametros se le llama.
 (Muy util si estas llamadas o acceso a propiedades estan el el mounted o created del componente)
 En mocks no podemos reemplazar los methods del propio componentes para ella usaríamos la propiedad methods.
@@ -200,7 +200,7 @@ const wrapper = shallowMount(Component, {
 })
 expect(wrapper.vm.$route.path).toBe($route.path)
 ```
-####methods
+#### methods
 Si en algun test necesitamos reemplazar un metodo del propio componente se haría con la propiedad methods.
 
 ```javascript
@@ -228,7 +228,7 @@ const options = {
 const wrapper = mount(Component, options)
 expect(wrapper.text()).toBe('aBC')
 ```
-####data
+#### data
 Para pasar valores del data en el montado del componete, estos se fusionaran con los ya existenes. Es decir cambiara el valor del data del componente si exite y si no lo creara.
 
 ```javascript
@@ -259,7 +259,7 @@ const wrapper = mount(Component, {
 wrapper.find('#foo').text() // 'foo'
 wrapper.find('#bar').text() // 'my-override'
 ```
-####propsData
+#### propsData
 Setear las propiedades del componente en el momento del montado.
 
 ```javascript
@@ -275,7 +275,7 @@ const wrapper = mount(Component, {
 expect(wrapper.text()).toBe('aBC')
 ```
 
-####localVue
+#### localVue
 Una copia local de vue creada con [`createLocalVue`][createLocalVue] para usarla al montar el componente. Es útil para instalar plugins de vue que solo usa esta componente en esta copia, ya que de esta forma no vamos ensuciando la instancia de vue global que comparten todos los componentes.
 
 ```javascript
@@ -298,14 +298,14 @@ const wrapper = mount(Component, {
 })
 expect(wrapper.vm.$route).toBeInstanceOf(Object)
 ````
-####attachToDocument
+#### attachToDocument
 * type: `boolean`
 * default: `false`
 
 Para setear si el componente puede atacar al DOM en el momento de montarlo.
 Cuando se activa atacar al DOM, se debe llamar a `wrapper.destroy()` al terminar el test para eliminar los elementos del DOM renderizados y la instancia del componente.
 
-####slots
+#### slots
 * tipo: `{ [name: string]: Array<Component>|Component|string }`
 
 Provide an object of slot contents to the component. The key corresponds to the slot name. The value can be either a component, an array of components, or a template string, or text.
@@ -347,24 +347,24 @@ test('if render slot content', () => {
 ```
 
 
-####resto de propiedades
+#### resto de propiedades
 Hay más propiedades para configurar el componente en el momento del montado para poder verlas todas accede a la sección de propiedades en la docuentación de vue-test-util desde este
 [enlace][mounting options].
 
-##wrapper
+## wrapper
 `Wrapper` es un objeto que contiene un componente montado o un vnode con sus metodos para testear el componente o el vnode.
 
-###Propiedades
+### Propiedades
 
-####vm
+#### vm
 `Component` (solo lectura): es la instancía de `Vue`. Se puede acceder a todos los metodos y porpiedades de la instancia con `wrapper.vm`. Esta instancia solo existe en el wrapper del componente Vue.
 
-####element
+#### element
 `HTMLElement` (solo lectura): el nodo DOM raiz del wrapper.
 
-###Metodos
+### Metodos
 
-####attributes
+#### attributes
 Devuelve los atributos del nodo del DOM del `wrapper`. Si  se le pasa como parametro la `key` de un atributo devolvera el valor de ese atributo.
 * Argumentos:
   * `{string} key` optional
@@ -378,7 +378,7 @@ const wrapper = mount(Foo)
 expect(wrapper.attributes().id).toBe('foo')
 expect(wrapper.attributes('id')).toBe('foo')
 ```
-####classes
+#### classes
 Devuelve las clases del nodo del DOM del `wrapper`.
 Devuelve un array de clases si no se le pasa parametro y si se le pasa un string como parametro devueve true o false si esté esta entre las clases que contiene el DOM.
 
@@ -395,7 +395,7 @@ expect(wrapper.classes()).toContain('bar')
 expect(wrapper.classes('bar')).toBe(true)
 ```
 
-####contains
+#### contains
 Devuelve si el `wrapper` contiene o no el elemento buscado por el [selector][selector] especificado.
 
 * Argumentos:
@@ -411,7 +411,7 @@ const wrapper = mount(Foo)
 expect(wrapper.contains('p')).toBe(true)
 expect(wrapper.contains(Bar)).toBe(true)
 ```
-####emitted
+#### emitted
 Devuelve un objeto que contiene los eventos personalizados emitidos por `wrapper` `vm`.
 * Devuelve: `{ [name: string]: Array<Array<any>> }`
 ```javascript
@@ -455,7 +455,7 @@ expect(wrapper.emitted('foo')[1]).toEqual([123])
 ```
 El método `.emitted()` devuelve el mismo objeto cada vez que se llama, no uno nuevo, por lo que el objeto se actualizará únicamente cuando se activen nuevos eventos.
 
-####emittedByOrder
+#### emittedByOrder
 Devuelve un array que contiene los eventos personalizados emitidos por `wrapper` `vm`.
 
 * Devuelve: `Array<{ name: string, args: Array<any> }>`
@@ -480,7 +480,7 @@ wrapper.emittedByOrder() returns the following Array:
 expect(wrapper.emittedByOrder().map(e => e.name)).toEqual(['foo', 'bar'])
 ```
 
-####exists
+#### exists
 Devuelve si el `Wrapper` o el `WrapperArray` existe.
 * devuelve: `{boolean}`
 
@@ -495,7 +495,7 @@ expect(wrapper.findAll('div').exists()).toBe(true)
 expect(wrapper.findAll('does-not-exist').exists()).toBe(false)
 ```
 
-####find
+#### find
 Devuelve el 'Wrapper' del primer elemento del DOM o componente Vue que coincide con el [selector][selector] pasado como parametro.
 
 * Argumentos:
@@ -522,7 +522,7 @@ const fooRef = wrapper.find({ ref: 'foo' })
 expect(fooRef.is(Foo)).toBe(true)
 ```
 
-####findAll
+#### findAll
 Devuelve el [`WrapperArray`][WrapperArray] de los elementos que coinciden con el [selector][selector] pasado como parametro.
 * Argumentos:
   * `{string|Component}` selector
@@ -539,7 +539,7 @@ expect(div.is('div')).toBe(true)
 const bar = wrapper.findAll(Bar).at(0)
 expect(bar.is(Bar)).toBe(true)
 ```
-####isEmpty
+#### isEmpty
 Devuelve true si el `Wrapper` no contiene hijos.
 * Devuelve: `{boolean}`
 
@@ -550,7 +550,7 @@ import Foo from './Foo.vue'
 const wrapper = mount(Foo)
 expect(wrapper.isEmpty()).toBe(true)
 ```
-####isVisible
+#### isVisible
 Devuelve true si el 'Wrapper' es visible.
 Comprueba tambien que los elementos ancestros no tengan ni 'display: none' ni 'visibility: hidden' para chequear que el 'Wrapper' es visible.
 Es útil para comprobar que se esta apliacando la directiva v-show en componentes.
@@ -563,7 +563,7 @@ const wrapper = mount(Foo)
 expect(wrapper.isVisible()).toBe(true)
 expect(wrapper.find('.is-not-visible').isVisible()).toBe(false)
 ```
-####setData
+#### setData
 Setea a `Wrapper` `vm` data.
 `setData` usa internamente `Vue.set`
 * Argumentos:
@@ -578,7 +578,7 @@ wrapper.setData({ foo: 'bar' })
 expect(wrapper.vm.foo).toBe('bar')
 ```
 
-####setMethods
+#### setMethods
 Crea o sobrescribe metodos y fuerza su actualización en `Wrapper` `vn`.
 
 * Arguments:
@@ -596,7 +596,7 @@ wrapper.setMethods({ clickMethod: clickMethodStub })
 wrapper.find('button').trigger('click')
 expect(clickMethodStub.called).toBe(true)
 ```
-####setProps
+#### setProps
 Setea propiedeades y fuerza su actualización en `Wrapper` `vn`.
 
 ```javascript
@@ -608,7 +608,7 @@ wrapper.setProps({ foo: 'bar' })
 expect(wrapper.vm.foo).toBe('bar')
 ```
 
-####setValue
+#### setValue
 Setea el valor de un input text o seleciona un elemento y actualiza el data asociado al v-model.
 
 * Argumentos:
@@ -628,7 +628,7 @@ select.setValue('option value')
 ```
 Ver tambien [setChecked][setChecked], [setSelected][setSelected].
 
-####text
+#### text
 Devuelve el contenido de texto del `Wrapper`.
 
 * Devuelve: `{string}`
@@ -640,7 +640,7 @@ import Foo from './Foo.vue'
 const wrapper = mount(Foo)
 expect(wrapper.text()).toBe('bar')
 ```
-####trigger
+#### trigger
 Lanza un evento asincrono del `Wrapper` DOM node.
 
 * Argumentos:
@@ -674,7 +674,7 @@ test('trigger demo', async () => {
 })
 ```
 
-##Ejemplo buscar elementos en el DOM
+## Ejemplo buscar elementos en el DOM
 Para los casos en los que tenemos que interactuar con algún elemento del DOM es más seguro agregarle an atributo ref, que por una query de clases ya que es más improbable que cambiemos una referencia que una clase.
 
 ejemplo para el tempalte:
@@ -747,9 +747,9 @@ describe('ModuleActionBtn', () => {
 })
 
 ```
-##Ejemplos reemplazar funcionalidades y propiedades de objetos
+## Ejemplos reemplazar funcionalidades y propiedades de objetos
 
-###Mockear propiedades de difícil acceso o control
+### Mockear propiedades de difícil acceso o control
 Aquí teníamos el problema que necesitabamos acceder a un hijo del popover por referencia y no teniamos acceso por temas de como se monta el popover no sabemos cuando esta accesible etc.
 
 ```javascript
@@ -771,7 +771,7 @@ expect(cmp.vm.$refs.popover.$refs.popper.style.color).toBe('fadsfas')
 cmp.vm.setColor()
 expect(cmp.vm.$refs.popover.$refs.popper.style.color).toBe('pink')
 ```
-###Probar un try catch
+### Probar un try catch
 
 tenemos este código
 
@@ -816,7 +816,7 @@ test('if component with the ref status-cell is enable and the color is empty and
   })
 ```
 
-###Pisar una funcionalidad de un elemento del DOM
+### Pisar una funcionalidad de un elemento del DOM
 
 Por ejemplo style.removeProperty
 
@@ -832,7 +832,7 @@ test('if component with the ref status-cell is enable and the color is empty', (
 
 ```
 
-###Reemplazando respuestas de llamandas a axios
+### Reemplazando respuestas de llamandas a axios
 
 Ejemplo de componente
 
