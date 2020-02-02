@@ -168,9 +168,9 @@ test('renders a button', () => {
 
 > Puede encontrar más ejemplos y documentación más detallada del metodo  `shallowMount()` en [este enlace][vue shallowmount].
 
-\###Principales Opciones
+###Principales Opciones
 Opciones par mount y shallowMount
-\####propsData
+####propsData
 Setea las props del componente al montarlo.
 
 ```javascript
@@ -186,8 +186,10 @@ const wrapper = mount(Component, {
 expect(wrapper.text()).toBe('aBC')
 ```
 
-\####mocks
-Agregue propiedades adicionales a la instancia. Útil para reemplazar metodos globlaes u otras funcionalidades que en el momento del test no queramos que ejecuten el verdadero codigo. Tambien es útil para agregar jest.fn que luecongo espiemos para comprobar que ciertos metodos se han ejecutado con los parametros que queremos pero sin llegar a ejecutar el codigo, ejomplo llamadas a servicios, emits. Tambien sirve para devolver valores de funciones o propiedades de objetos que por la forma de montar el componente a la hora del test no estan accesibles. (Muy util si estas llamadas o acceso a propiedades estan el el mounted o created del componente)
+####mocks
+Agregue propiedades adicionales a la instancia. Útil para reemplazar metodos globales que en el momento del test no queramos que ejecuten el verdadero codigo. Tambien es útil para reemplazar metedos globlaes por otras funciones o por jest.fn que luengo espiemos para comprobar que estos se han llamado en nuestro código pero sin ejecutar el verdaderó código. Por ejemplo aquí podriamos reemplazar el i18n para que devuela un texto, el \$route para las rutas o el \$emit por un jest.fn para comprobar que es llamado y con que parametros se le llama.
+(Muy util si estas llamadas o acceso a propiedades estan el el mounted o created del componente)
+En mocks no podemos reemplazar los methods del propio componentes para ella usaríamos la propiedad methods.
 
 ```javascript
 const $route = { path: 'http://www.example-path.com' }
@@ -198,6 +200,114 @@ const wrapper = shallowMount(Component, {
 })
 expect(wrapper.vm.$route.path).toBe($route.path)
 ```
+####methods
+Si en algun test necesitamos reemplazar un metodo del propio componente se haría con la propiedad methods.
+
+```javascript
+const Component = {
+  template: '<div>{{ foo() }}{{ bar() }}{{ baz() }}</div>',
+  methods: {
+    foo() {
+      return 'a'
+    },
+    bar() {
+      return 'b'
+    }
+  }
+}
+const options = {
+  methods: {
+    bar() {
+      return 'B'
+    },
+    baz() {
+      return 'C'
+    }
+  }
+}
+const wrapper = mount(Component, options)
+expect(wrapper.text()).toBe('aBC')
+```
+####data
+Para pasar valores del data en el montado del componete, estos se fusionaran con los ya existenes. Es decir cambiara el valor del data del componente si exite y si no lo creara.
+
+```javascript
+const Component = {
+  template: `
+    <div>
+      <span id="foo">{{ foo }}</span>
+      <span id="bar">{{ bar }}</span>
+    </div>
+  `,
+
+  data() {
+    return {
+      foo: 'foo',
+      bar: 'bar'
+    }
+  }
+}
+
+const wrapper = mount(Component, {
+  data() {
+    return {
+      bar: 'my-override'
+    }
+  }
+})
+
+wrapper.find('#foo').text() // 'foo'
+wrapper.find('#bar').text() // 'my-override'
+```
+####propsData
+Setear las propiedades del componente en el momento del montado.
+
+```javascript
+const Component = {
+  template: '<div>{{ msg }}</div>',
+  props: ['msg']
+}
+const wrapper = mount(Component, {
+  propsData: {
+    msg: 'aBC'
+  }
+})
+expect(wrapper.text()).toBe('aBC')
+```
+
+####localVue
+Una copia local de vue creada con [`createLocalVue`][createLocalVue] para usarla al montar el componente. Es útil para instalar plugins de vue que solo usa esta componente en esta copia, ya que de esta forma no vamos ensuciando la instancia de vue global que comparten todos los componentes.
+
+```javascript
+import { createLocalVue, mount } from '@vue/test-utils'
+import VueRouter from 'vue-router'
+import Foo from './Foo.vue'
+
+const localVue = createLocalVue()
+localVue.use(VueRouter)
+
+const routes = [{ path: '/foo', component: Foo }]
+
+const router = new VueRouter({
+  routes
+})
+
+const wrapper = mount(Component, {
+  localVue,
+  router
+})
+expect(wrapper.vm.$route).toBeInstanceOf(Object)
+````
+####attachToDocument
+* type: `boolean`
+* default: `false`
+
+Para setear si el componente puede atacar al DOM en el momento de montarlo.
+Cuando se activa atacar al DOM, se debe llamar a `wrapper.destroy()` al terminar el test para eliminar los elementos del DOM renderizados y la instancia del componente.
+
+####resto de propiedades
+Hay más propiedades para configurar el componente en el momento del montado para poder verlas todas accede a la sección de propiedades en la docuentación de vue-test-util desde este 
+[enlace][mounting options].
 
 [jest]: https://jestjs.io/en/
 
@@ -236,3 +346,7 @@ expect(wrapper.vm.$route.path).toBe($route.path)
 [vue shallowmount]: https://vue-test-utils.vuejs.org/api/shallowMount.html
 
 [instrucciones]: https://vue-test-utils.vuejs.org/guides/testing-single-file-components-with-jest.html
+
+[createLocalVue]: https://vue-test-utils.vuejs.org/api/createLocalVue.html
+
+[mounting options]: https://vue-test-utils.vuejs.org/api/options.html
