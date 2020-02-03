@@ -108,7 +108,7 @@ describe('Component test suite', () => {
 })
 ```
 
-> Se pueden encontrar snippet con versiones para VSCode y Atom para inicializar los archivos de test con esta estructura [aquí](../../snippets)
+> Se pueden encontrar snippets con versiones para VSCode y Atom para inicializar los archivos de test con esta estructura [aquí](../../snippets)
 
 ## Métodos `mount()` y `shallowMount()`
 

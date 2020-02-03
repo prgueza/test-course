@@ -1,4 +1,9 @@
-import { multiply, divide, sum, compute } from './examples.js'
+import {
+  multiply,
+  divide,
+  sum,
+  compute
+} from './examples.js'
 
 describe('Multiply function test cases', () => {
 
