@@ -48,68 +48,6 @@ También es necesario añadir una serie de modificaciones en el archivo de confi
 
     Debemos añadir también la extensión `.vue` a la expresión que utiliza [Jest] para determinar la cobertura, de manera que nuestros componentes sean analizados.
 
-## Estructura de los archivos de Test
-
-Si hemos configurado correctamente nuestro entorno de test, [Jest] se encargará de buscar los archivos correspondientes a la hora de lanzar los tests, por lo que es indiferente dónde dejemos estos archivos siempre y cuando estén dentro del scope que declaramos en la [configuración] de [Jest]. Se recomienda guardar los archivos de test junto con el archivo `.vue` del componente al que hacen referencia dentro de un mismo directorio bajo el nombre del componente. De esta forma tendremos los tests y los archivos del componente almacenados en un mismo directorio facilitando compartir nuestro componente y saber si dispone de tests o no.
-
-    - src
-      - components
-        - componentA
-          - ComponentA.vue
-          - ComponentA.spec.js
-        - componentB
-          - ComponentB.vue
-          - ComponentB.spec.js
-
-Los tests pueden estructurarse de muchas formas distintas, pero recomendamos agrupar los distintos tests en función de qué propiedad del componente estamos probando. Además es recomendable seguir el mismo orden que tienen estas propiedades dentro de nuestros componentes:
-
-```js
-import Vue from 'vue'
-import { shallowMount, createLocalVue } from '@vue/test-utils'
-import Component from './Component'
-
-describe('Component test suite', () => {
-
-  /* TEMPLATE RELATED TESTS */
-  describe('Template rendering', () => {
-    // ...
-  })
-
-  /* DATA RELATED TESTS */
-  describe('Data and Props', () => {
-    // ...
-  })
-
-  /* COMPUTED PROPERTIES RELATED TESTS */
-  describe('Computed properties', () => {
-    describe('Computed property A', () => {
-      // ...
-    })
-    // ...
-  })
-
-
-  /* LIFECYCLE HOOKS RELATED TESTS */
-  describe('Lifecycle hooks', () => {
-    describe('Created hook', () => {
-      // ...
-    })
-    // ...
-  })
-
-  /* METHODS RELATED TESTS */
-  describe('Methods', () => {
-    describe('Method A', () => {
-      // ..
-    })
-    // ...
-  })
-
-})
-```
-
-> Se pueden encontrar snippets con versiones para VSCode y Atom para inicializar los archivos de test con esta estructura [aquí](../../snippets)
-
 ## Métodos `mount()` y `shallowMount()`
 
 ### Mount
@@ -170,6 +108,7 @@ test('renders a button', () => {
 
 ### Principales Opciones
 Opciones par mount y shallowMount
+
 #### propsData
 Setea las props del componente al montarlo.
 

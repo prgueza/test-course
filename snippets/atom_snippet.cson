@@ -1,46 +1,56 @@
 '.source.js':
   'Test Skeleton':
-    'prefix': 'test'
+    'prefix': 'spec'
     'body': '''
       import Vue from 'vue'
       import { shallowMount, createLocalVue } from '@vue/test-utils'
       import ${1:Component} from './${1:Component}'
 
+      const localVue = createLocalVue()
+
       describe('${1:Component} test suite', () => {
-
-        /* TEMPLATE RELATED TESTS */
-        describe('Template rendering', () => {
-          // ...
-        })
-
-        /* DATA RELATED TESTS */
-        describe('Data and Props', () => {
-          // ...
-        })
-
-        /* COMPUTED PROPERTIES RELATED TESTS */
-        describe('Computed properties', () => {
-          describe('Computed property A', () => {
-            // ...
-          })
-          // ...
-        })
-
-        /* LIFECYCLE HOOKS RELATED TESTS */
-        describe('Lifecycle hooks', () => {
-          describe('Created hook', () => {
-            // ...
-          })
-          // ...
-        })
-
-        /* METHODS RELATED TESTS */
-        describe('Methods', () => {
-          describe('Method A', () => {
-            // ..
-          })
-          // ...
-        })
-
+        ${0}
+      })
+    '''
+  'Describe':
+    'prefix': 'desc'
+    'body': '''
+      describe('${1:property/event} | ${2:when}', () => {
+        ${0}
+      })
+    '''
+  'Describe Prop':
+    'prefix': 'desc-prop'
+    'body': '''
+      describe(':${1:property} | ${2:when}', () => {
+        ${0}
+      })
+    '''
+  'Describe Event':
+    'prefix': 'desc-event'
+    'body': '''
+      describe('@${1:event} | ${2:when}', () => {
+        ${0}
+      })
+    '''
+  'Test':
+    'prefix': 'test'
+    'body': '''
+      test('${1:behaviour}', () => {
+        ${0}
+      })
+    '''
+  'Test Prop':
+    'prefix': 'test-prop'
+    'body': '''
+      test('${1:behaviour}', () => {
+        ${0}
+      })
+    '''
+  'Test Event':
+    'prefix': 'test-event'
+    'body': '''
+      test('${1:behaviour}', () => {
+        ${0}
       })
     '''
