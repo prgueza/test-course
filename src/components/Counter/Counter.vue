@@ -1,16 +1,18 @@
 <template lang="pug">
-  p {{ count }}
-  button(@click="handleClick") Incrementar valor
+  div
+    p {{ count }}
+    button(@click="handleClick", ref="button") Incrementar valor
 </template>
 
 <script>
 export default {
-  name: "CButton",
+  name: "counter",
 
   props: {
     initialValue: {
       type: Number,
-      default: 0
+      default: 0,
+      validator: value => value >= 0
     },
   },
 
@@ -18,6 +20,10 @@ export default {
     return {
       counter: 0
     }
+  },
+
+  mounted () {
+    this.counter = this.initialValue
   },
 
   methods: {
