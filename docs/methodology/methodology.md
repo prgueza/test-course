@@ -401,11 +401,11 @@ Aunque parezca que nos estamos saltando un paso al invocar directamente el contr
 
 ### 3. Hmtl renderizado
 
-Una de las salidas del componente que seguramente necesitemos probar será el renderizado del html, que es el resultado de una combinación determinada de entradas. Las utilidades de [Vue Test Utils] nos permiten probar esta salida de varias formas con más o menos detalle. Un punto importante a tener en cuenta aquí es que el renderizado, al igual que la emisión de eventos, se realiza de forma asíncrona y al final de los ciclos del componente, con lo que en muchos casos sera necesario escribir el test de forma asíncrona.
+Una de las salidas del componente que seguramente necesitemos probar será el renderizado del html que sea el resultado de una combinación determinada de entradas. Las utilidades de [Vue Test Utils] nos permiten probar esta salida de varias formas con más o menos detalle. Un punto importante a tener en cuenta aquí es que el renderizado, al igual que la emisión de eventos, se realiza de forma asíncrona y al final de los ciclos del componente, con lo que en muchos casos sera necesario escribir el test de forma asíncrona.
 
-Un caso de uso sencillo es probar que el valor de una `prop`, (o un valor generado a partir del valor de una `prop`) se pinta en un lugar determinado del `html`. Como es el resultado de la configuración de una prop, es aconsejable inlclurlo dentro del `describe` de esa `prop` para ese caso determinado. Para el ejemplo hemos tomado el caso en que se configura el contador con un `initialValue` y hemos utilizado el `describe` que hemos empezado en la sección de props para incluir el test del renderizado. De esta manera además aprovechamos el montado del componente y nos ahorramos algo de tiempo de ejecución.
+Un caso de uso sencillo es probar que el valor de una `prop`, o un valor generado a partir del valor de una `prop`, se pinta en un lugar determinado del `html`. Como es el resultado de la configuración de una prop, es aconsejable inlclurlo dentro del `describe` de esa `prop` para ese caso determinado. Para el ejemplo hemos tomado el caso en que se configura el contador con un `initialValue` y hemos utilizado el `describe` que hemos empezado en la sección de props para incluir el test del renderizado. De esta manera además aprovechamos el montado del componente y nos ahorramos algo de tiempo de ejecución.
 
-> En algunos casos puede incluso probarse dentro del mismo test (un `test` puede tener más de un `expect`), pero suele queda más claro hacerlo en tests separados.
+> En algunos casos puede incluso probarse dentro del mismo test (un `test` puede tener más de un `expect`), pero suele quedar más claro hacerlo en tests separados.
 
 Para comprobar que se renderiza correctamente hacemos uso del método `text()` del `wrapper`, y tras buscar el elemento html donde debía pintarse el valor (buscando el elemento a través de una referencia en este caso), comprobamos que el texto de ese `wrapper` coincide con lo que esperamos. En este caso es necesario pasar el texto renderizado a tipo `Number` ya que el `toBe` hace una prueba de identidad y, aunque la `prop` es de tipo `Number`, el método `text()` devuelve un `String`.
 
@@ -415,15 +415,10 @@ describe(`:initialValue | Cuando se pasa ${sampleInitialValue} como valor inicia
 
   const wrapper = shallowMount(Counter, { propsData: { initialValue: sampleInitialValue } })
 
-  /* TEST PROP */
-  it(`El valor del contador es ${sampleInitialValue}`, () => {
-    expect(wrapper.vm.counter).toBe(sampleInitialValue)
-  })
-
-  // ...
+  // ... TEST PROP
 
   /* TEST RENDER*/
-  it('El contador incrementa su valor en 1', () => {
+  it('El contador muestra su valor en el html renderizado', () => {
     const p = wrapper.find({ ref: 'count' }) // Buscamos el elemento donde debe pintarse
     expect(Number(p.text())).toBe(sampleInitialValue) // Comprobamos que el texto coincide
   })
@@ -431,7 +426,7 @@ describe(`:initialValue | Cuando se pasa ${sampleInitialValue} como valor inicia
 })
 ```
 
-Otra forma de comprobar que se está renderizando correctamente el `html` es mediante el uso de [Snapshots]. Un Snapshot es básicamente una captura del resultado de una operación cualquiera, almacenado en forma de `String`. En el caso del `html` lo más común es buscar un `wrapper` determinado, (o el wrapper global del componente), sacar su `html` mediante método `html()` del `wrapper`, y comparar el resultado con su *snapshot*. Los *snapshots* se generan automáticamente la primera vez que lanzamos el test, y en las siguientes ejecuciones se utiliza el *snapshot* generado en la primera para comparar los resultados.
+Otra forma de comprobar que se está renderizando correctamente el `html` es mediante el uso de [Snapshots]. Un Snapshot es básicamente una captura del resultado de una operación cualquiera, almacenado en forma de `String`. En el caso del `html` lo más común es buscar un `wrapper` determinado, (o el wrapper global del componente), sacar su `html` mediante el método `html()` del `wrapper`, y comparar el resultado con su *snapshot*. Los *snapshots* se generan automáticamente la primera vez que lanzamos el test, y en las siguientes ejecuciones se utiliza el *snapshot* generado en la primera para comparar los resultados.
 
 > Si en algún momento queremos actualizar los snapshots tendremos que ejecutar los tests con la opción `-u`.
 
@@ -443,18 +438,18 @@ describe(`:initialValue | Cuando se pasa ${sampleInitialValue} como valor inicia
 
   const wrapper = shallowMount(Counter, { propsData: { initialValue: sampleInitialValue } })
 
-  // ...
+  // ... TEST PROP
 
   /* TEST RENDER*/
-  it('El contador incrementa su valor en 1', () => {
+  it('El contador muestra su valor en el html renderizado', () => {
     const p = wrapper.find({ ref: 'count' }) // Buscamos el elemento donde debe pintarse
-    expect(p.html()).toMatchSnapshot() // Comprobamos que el texto coincide
+    expect(p.html()).toMatchSnapshot() // Comprobamos que el snapshot coincide
   })
 
 })
 ```
 
-Tras la primera vez que lanzamos el test, se crea un archivo de *snapshots* para el componente que se almacena en una carpeta. Este archivo exporta un objeto donde la `key` de cada propiedad es el nombre del test que genera el *snapshot*, y el `value` es el resultado. En el caso del test anterior el *snapshot* sería el siguiente.
+Tras la primera vez que lanzamos el test, se crea un archivo de *snapshots* para el componente que se almacena en una carpeta. Este archivo exporta un objeto donde la `key` de cada propiedad es el nombre del test y el número del expect que que genera el *snapshot*, y el `value` es el resultado. En el caso del test anterior el *snapshot* sería el siguiente.
 
 ```js
 exports[`Counter test suite :initialValue | Cuando se pasa 4 como valor inicial El contador incrementa su valor en 1 1`] = `"<p>4</p>"`;
@@ -471,6 +466,7 @@ const elements = [1, 2, 3, 4, 5]
 describe(`:elements | La lista renderiza ${elements.length} elementos si existen, o no se renderiza si no hay elementos`, () => {
 
   const wrapper = shallowMount(List, { propsData: { elements } })
+
   it(`La lista renderiza ${elements.length} elementos`, () => {
     const listElements = wrapper.findAll('li') // Buscamos todos los elementos li (devuelve un wrapperArray)
     expect(listElements.length).toBe(elements.length) // Comprobamos con el número de elementos que llegan al componente como prop
@@ -488,19 +484,83 @@ describe(`:elements | La lista renderiza ${elements.length} elementos si existen
 
 Cuando esperamos que la búsqueda devuelva más de un elemento debemos usar el método `findAll()` en vez de utilizar el método `find()`. Este método nos devuelve un `wrapperArray`, que es un objeto que contiene un array de wrappers en `wrapperArray.wrappers` y el número de wrappers en `wrapperArray.length`
 
-El motivo por el cual en el segundo test es necesario esperar al siguiente ciclo para hacer la comprobación es que, mientras que en el primero la prop se configura en el `shallowMount()` (que devuelve el wrapper con el renderizado actualizado), en el segundo estamos configurando las props a posteriori, con lo que tenemos que esperar a que se lance la actualización del renderizado antes de poder hacer la prueba.
+El motivo por el cual en el segundo test es necesario esperar al siguiente ciclo para hacer la comprobación es que, mientras que en el primero la prop se configura en el `shallowMount()` (que devuelve el wrapper con el renderizado actualizado), en el segundo estamos configurando las props a posteriori, con lo que tenemos que esperar a que se lance la actualización del renderizado antes de poder hacer la comprobación.
 
 ### 4. Emisión de eventos
 
-asincronia y asincronia doble si se hace el trigger
+Otro caso de uso común es probar que nuestro componente emite eventos con parámetros determinados y en un orden concreto. La principal herramienta para este tipo de tests son los métodos `emitted` y `emittedByOrder` de nuestro `wrapper`. La diferencia entre estos dos métodos es el resultado que devuelven, y la elección de cual usar según que caso depende de este resultado.
 
+- `emitted`
 
-### Casos
+  El método `emited` devuelve un **Objeto** con los distintos eventos que ha emitido nuestro componente. Dentro de este objeto, las claves serán el nombre de los distintos eventos que ha emitido, y el valor de cada clave será un **Array** donde cada elemento es otro **Array** que contiene los argumentos que se han usado a la hora de emitir este evento.
 
-- Ejemplos con entrada de prop
-  - renderizacion de html
+  Esto significa que aunque para un mismo evento, las distintas emisiones estén ordenadas (el primer elemento del array será un array con los argumentos de la primera emisión de ese evento), si existen varios eventos distintos, al ser un **Objeto** una estructura no ordenada, no podremos saber en qué orden se han emitido.
 
-- Ejemplos de escuchar eventos de salida
+  Por ejemplo, considerando la siguiente secuencia de eventos:
+
+  ```js
+  this.$emit('evento A', 1) // Evento A con 1 como argumento
+  this.$emit('evento B', 1) // ...
+  this.$emit('evento A', 2)
+  this.$emit('evento A', 3, 4) // Evento A con 3 y 4 como argumentos
+  ```
+
+  El resultado de nuestro `wrapper.emitted()` será:
+
+  ```js
+  wrapper.emitted() === {
+    'evento A': [[1], [2], [3, 4]], // [[argumentos de la primera llamada], [...], [...]]
+    'evento B': [[1]]
+  }
+  ```
+
+  Con este resultado no somos capaces de saber si el primer evento en lanzarse ha sido el **evento A** o el **evento B**.
+
+  Esto significa que cuando el orden en que se emiten **distintos** eventos importa y es algo que queremos probar, el método `emitted()` no nos sirve. En general esto no suele ser un problema, y este método funciona para cualquier otro caso. Si que nos sirve, por ejemplo, para saber cuántas veces se ha llamado el **evento A** (usando `emitted('evento A').length` o `emitted()['evento A'].length`), o para saber con qué argumentos se ha llamado el **evento A** por segunda vez (usando `emitted('evento A')[1]`).
+
+- `emittedByOrder`
+
+  El método `emittedByOrder` devuelve un **Array** donde cada elemento es un evento lanzado por el componente (sin agrupar por nombre) en forma de **Objeto** donde se especifica el nombre y los argumentos de ese evento.
+
+  Por ejemplo, para la misma secuencia de eventos que en el caso anterior, el resultado de nuestro `wrapper.emittedByOrder()` sería:
+
+  ```js
+  wrapper.emittedByOrder() === [
+    { name: 'evento A', args: [1] },
+    { name: 'evento B', args: [1] },
+    { name: 'evento A', args: [2] },
+    { name: 'evento A', args: [3, 4] },
+  ]
+  ```
+
+  De esta forma, los eventos quedan ordenados, y podemos comprobar cuál ha sido el primer evento en lanzarse y en qué orden se han lanzado los distintos eventos a lo largo de un test.
+
+En el caso de nuestro componente contador, podemos probar que al incrementar la cuenta, a demás de incrementarse el contador, se emite un evento con el nuevo valor del contador como argumento. Utilizando el describe del evento de entrada `@click` (que es quien provoca que se emita este evento de salida) el test para este caso sería el siguiente:
+
+```js
+describe(`@click | Cuando el usuario hace click en el botón`, () => {
+
+  const wrapper = shallowMount(Counter)
+
+  // ... TEST EVENTO CLICK
+
+  it('El contador emite un evento con el nombre "count" y con el valor del contador como argumento', async () => {
+    const button = wrapper.find({ ref: 'buttonOds' }) // Buscamos el botón
+    button.vm.$listeners.click() // Simulamos el evento
+    await wrapper.vm.$nextTick()
+    const emitted = wrapper.emitted()
+    expect(emitted.count).toBeTruthy() // Comprobamos que se emite el evento
+    expect(emitted.count.length).toBe(1) // Comprobamos que se emite el evento una sola vez
+    expect(emitted.count[0]).toEqual([wrapper.vm.count]) // Comprobamos los argumentos
+  })
+
+})
+```
+
+Es importante aquí también entender que los eventos se meten en la cola y no se liberan hasta el final del ciclo, por lo que es importante que utilicemos el `await wrapper.vm.$nextTick()`. Además, para los casos como este en los que es un evento de entrada el que provoca que se lance el evento que queremos probar, se recomienda utilizar el último método visto en la sección de **eventos de entrada** (utilizando el `wrapper.vm.$listeners`) ya que de no hacerlo tendríamos que poner otro `await wrapper.vm.$nextTick()` más, para esperar los dos retardos impuestos por el `$emit()`, en el evento de entrada y en el de salida.
+
+## TODO
+
 - Ejemplos de escuchar llamadas a apis
 
 [jest]: https://jestjs.io/en/
