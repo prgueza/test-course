@@ -403,30 +403,92 @@ Aunque parezca que nos estamos saltando un paso al invocar directamente el contr
 
 Una de las salidas del componente que seguramente necesitemos probar será el renderizado del html, que es el resultado de una combinación determinada de entradas. Las utilidades de [Vue Test Utils] nos permiten probar esta salida de varias formas con más o menos detalle. Un punto importante a tener en cuenta aquí es que el renderizado, al igual que la emisión de eventos, se realiza de forma asíncrona y al final de los ciclos del componente, con lo que en muchos casos sera necesario escribir el test de forma asíncrona.
 
+Un caso de uso sencillo es probar que el valor de una `prop`, (o un valor generado a partir del valor de una `prop`) se pinta en un lugar determinado del `html`. Como es el resultado de la configuración de una prop, es aconsejable inlclurlo dentro del `describe` de esa `prop` para ese caso determinado. Para el ejemplo hemos tomado el caso en que se configura el contador con un `initialValue` y hemos utilizado el `describe` que hemos empezado en la sección de props para incluir el test del renderizado. De esta manera además aprovechamos el montado del componente y nos ahorramos algo de tiempo de ejecución.
+
+> En algunos casos puede incluso probarse dentro del mismo test (un `test` puede tener más de un `expect`), pero suele queda más claro hacerlo en tests separados.
+
+Para comprobar que se renderiza correctamente hacemos uso del método `text()` del `wrapper`, y tras buscar el elemento html donde debía pintarse el valor (buscando el elemento a través de una referencia en este caso), comprobamos que el texto de ese `wrapper` coincide con lo que esperamos. En este caso es necesario pasar el texto renderizado a tipo `Number` ya que el `toBe` hace una prueba de identidad y, aunque la `prop` es de tipo `Number`, el método `text()` devuelve un `String`.
+
 ```js
+const sampleInitialValue = 4
 describe(`:initialValue | Cuando se pasa ${sampleInitialValue} como valor inicial`, () => {
 
-  const sampleInitialValue = 4
   const wrapper = shallowMount(Counter, { propsData: { initialValue: sampleInitialValue } })
 
-  // it(`El valor del contador es ${sampleInitialValue}`, () => {
-  //   expect(wrapper.vm.counter).toBe(sampleInitialValue)
-  // })
+  /* TEST PROP */
+  it(`El valor del contador es ${sampleInitialValue}`, () => {
+    expect(wrapper.vm.counter).toBe(sampleInitialValue)
+  })
 
-  it('El nuevo valor del contador se muestra donde corresponde', async () => {
-    await wrapper.vm.$nextTick()
+  // ...
+
+  /* TEST RENDER*/
+  it('El contador incrementa su valor en 1', () => {
     const p = wrapper.find({ ref: 'count' }) // Buscamos el elemento donde debe pintarse
-    expect(p.text()).toBe(sampleInitialValue) // Comprobamos que el texto coincide
+    expect(Number(p.text())).toBe(sampleInitialValue) // Comprobamos que el texto coincide
   })
 
 })
 ```
 
-en el caso de setProps tener en cuenta asincronia
+Otra forma de comprobar que se está renderizando correctamente el `html` es mediante el uso de [Snapshots]. Un Snapshot es básicamente una captura del resultado de una operación cualquiera, almacenado en forma de `String`. En el caso del `html` lo más común es buscar un `wrapper` determinado, (o el wrapper global del componente), sacar su `html` mediante método `html()` del `wrapper`, y comparar el resultado con su *snapshot*. Los *snapshots* se generan automáticamente la primera vez que lanzamos el test, y en las siguientes ejecuciones se utiliza el *snapshot* generado en la primera para comparar los resultados.
 
-- texto renderizados
-- v-for de elementos con el wrapperArray
-- v-if con el exist
+> Si en algún momento queremos actualizar los snapshots tendremos que ejecutar los tests con la opción `-u`.
+
+En el caso anterior el test seria:
+
+```js
+const sampleInitialValue = 4
+describe(`:initialValue | Cuando se pasa ${sampleInitialValue} como valor inicial`, () => {
+
+  const wrapper = shallowMount(Counter, { propsData: { initialValue: sampleInitialValue } })
+
+  // ...
+
+  /* TEST RENDER*/
+  it('El contador incrementa su valor en 1', () => {
+    const p = wrapper.find({ ref: 'count' }) // Buscamos el elemento donde debe pintarse
+    expect(p.html()).toMatchSnapshot() // Comprobamos que el texto coincide
+  })
+
+})
+```
+
+Tras la primera vez que lanzamos el test, se crea un archivo de *snapshots* para el componente que se almacena en una carpeta. Este archivo exporta un objeto donde la `key` de cada propiedad es el nombre del test que genera el *snapshot*, y el `value` es el resultado. En el caso del test anterior el *snapshot* sería el siguiente.
+
+```js
+exports[`Counter test suite :initialValue | Cuando se pasa 4 como valor inicial El contador incrementa su valor en 1 1`] = `"<p>4</p>"`;
+```
+
+> Los snapshots pueden utilizarse para comparar cualquier resultado, no solo `html`, pero se recomienda no abusar de ellos ya que implica tener que gestionar actualizaciones de estos, más archivos en el repositorio, etc.
+
+Otro caso común a la hora de probar el `html` renderizado por el componente es verificar si ciertos elementos existen y en qué medida. Este tipo de tests suele aparecer cuando dentro de nuestro componente tenemos un `v-for` que renderice un número variable de elementos, o algún `v-if` que renderice o no un elemento según alguna prop.
+
+Para estos casos se utilizan la estructura `wrapperArray` que nos proporcionan las [Vue Test Utils], y el método `.exists()` del `wrapper`. Por ejemplo, Para un componente que genere una lista de elementos (con un `<li>` para cada elemento), y que no muestre la lista (el elemento `ul`) si no hay elementos, podríamos escribir el siguiente test:
+
+```js
+const elements = [1, 2, 3, 4, 5]
+describe(`:elements | La lista renderiza ${elements.length} elementos si existen, o no se renderiza si no hay elementos`, () => {
+
+  const wrapper = shallowMount(List, { propsData: { elements } })
+  it(`La lista renderiza ${elements.length} elementos`, () => {
+    const listElements = wrapper.findAll('li') // Buscamos todos los elementos li (devuelve un wrapperArray)
+    expect(listElements.length).toBe(elements.length) // Comprobamos con el número de elementos que llegan al componente como prop
+  })
+
+  it(`La lista no renderiza ningún elemento si no se pasan como prop`, async () => {
+    wrapper.setProps({ elements: [] })
+    await wrapper.vm.$nextTick() // Leer explicación más abajo
+    const renderedList = wrapper.find('ul').exists() // Preguntamos si existe el elemento ul (devuelve true/false)
+    expect(renderedList).toBe(false) // Comprobamos que no existe el elementu <ul>
+  })
+
+})
+```
+
+Cuando esperamos que la búsqueda devuelva más de un elemento debemos usar el método `findAll()` en vez de utilizar el método `find()`. Este método nos devuelve un `wrapperArray`, que es un objeto que contiene un array de wrappers en `wrapperArray.wrappers` y el número de wrappers en `wrapperArray.length`
+
+El motivo por el cual en el segundo test es necesario esperar al siguiente ciclo para hacer la comprobación es que, mientras que en el primero la prop se configura en el `shallowMount()` (que devuelve el wrapper con el renderizado actualizado), en el segundo estamos configurando las props a posteriori, con lo que tenemos que esperar a que se lance la actualización del renderizado antes de poder hacer la prueba.
 
 ### 4. Emisión de eventos
 
@@ -496,3 +558,5 @@ asincronia y asincronia doble si se hace el trigger
 [sencillos]: https://en.wikipedia.org/wiki/KISS_principle
 
 [cola de actualización]: https://vuejs.org/v2/guide/reactivity.html#Async-Update-Queue
+
+[Snapshots]: https://jestjs.io/docs/en/snapshot-testing#snapshot-testing-with-jest

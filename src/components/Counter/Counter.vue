@@ -34,17 +34,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-  .c-button {
-    &--medium {
-      font-size: 1rem;
-    }
-    &--big {
-      font-size: 2rem;
-    }
-    &--small {
-      font-size: .5rem;
-    }
-  }
-</style>

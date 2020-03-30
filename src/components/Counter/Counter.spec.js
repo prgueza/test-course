@@ -11,7 +11,7 @@ describe('Counter test suite', () => {
     })
     it('El contador incrementa su valor en 1', () => {
       const p = wrapper.find({ ref: 'count' }) // Buscamos el elemento donde debe pintarse
-      expect(Number(p.text())).toBe(sampleInitialValue) // Comprobamos que el texto coincide
+      expect(p.html()).toMatchSnapshot() // Comprobamos que el texto coincide
     })
   })
 
