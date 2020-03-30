@@ -488,11 +488,11 @@ El motivo por el cual en el segundo test es necesario esperar al siguiente ciclo
 
 ### 4. Emisión de eventos
 
-Otro caso de uso común es probar que nuestro componente emite eventos con parámetros determinados y en un orden concreto. La principal herramienta para este tipo de tests son los métodos `emitted` y `emittedByOrder` de nuestro `wrapper`. La diferencia entre estos dos métodos es el resultado que devuelven, y la elección de cual usar según que caso depende de este resultado.
+Otro caso de uso común es probar que nuestro componente emite eventos con parámetros determinados y en un orden concreto. La principal herramienta para este tipo de tests son los métodos `emitted` y `emittedByOrder` de nuestro `wrapper`. La diferencia entre estos dos métodos es el resultado que devuelven, y la elección de cual usar según qué caso depende de este resultado.
 
 - `emitted`
 
-  El método `emited` devuelve un **Objeto** con los distintos eventos que ha emitido nuestro componente. Dentro de este objeto, las claves serán el nombre de los distintos eventos que ha emitido, y el valor de cada clave será un **Array** donde cada elemento es otro **Array** que contiene los argumentos que se han usado a la hora de emitir este evento.
+  El método `emitted` devuelve un **Objeto** con los distintos eventos que ha emitido nuestro componente. Dentro de este objeto, las claves serán el nombre de los distintos eventos que ha emitido, y el valor de cada clave será un **Array** con un elemento por cada emisión del evento, donde cada elemento es a su vez otro **Array** que contiene los argumentos que se han usado a la hora de emitir este evento.
 
   Esto significa que aunque para un mismo evento, las distintas emisiones estén ordenadas (el primer elemento del array será un array con los argumentos de la primera emisión de ese evento), si existen varios eventos distintos, al ser un **Objeto** una estructura no ordenada, no podremos saber en qué orden se han emitido.
 
@@ -535,20 +535,21 @@ Otro caso de uso común es probar que nuestro componente emite eventos con pará
 
   De esta forma, los eventos quedan ordenados, y podemos comprobar cuál ha sido el primer evento en lanzarse y en qué orden se han lanzado los distintos eventos a lo largo de un test.
 
-En el caso de nuestro componente contador, podemos probar que al incrementar la cuenta, a demás de incrementarse el contador, se emite un evento con el nuevo valor del contador como argumento. Utilizando el describe del evento de entrada `@click` (que es quien provoca que se emita este evento de salida) el test para este caso sería el siguiente:
+En el caso de nuestro componente contador, podemos probar que al incrementar la cuenta, a demás de incrementarse el contador, se emite un evento con el nuevo valor del contador como argumento. Reutilizando el describe del evento de entrada `@click`, que es quien provoca que se emita este evento de salida, el test para este caso sería el siguiente:
+
+> Se han comentado las líneas relativas a la prueba de ver que el contador se incrementa para no interferir con la explicación, pero el test completo debería tener todas las líneas.
 
 ```js
 describe(`@click | Cuando el usuario hace click en el botón`, () => {
 
-  const wrapper = shallowMount(Counter)
-
-  // ... TEST EVENTO CLICK
-
-  it('El contador emite un evento con el nombre "count" y con el valor del contador como argumento', async () => {
+  it('El contador se incrementa y emite un evento con el nombre "count" y con el valor del contador como argumento', async () => {
+    const wrapper = shallowMount(Counter)
+    // const count_0 = wrapper.vm.count // Valor del contador en el momento inicial
     const button = wrapper.find({ ref: 'buttonOds' }) // Buscamos el botón
     button.vm.$listeners.click() // Simulamos el evento
     await wrapper.vm.$nextTick()
     const emitted = wrapper.emitted()
+    // expect(wrapper.vm.count).toBe(count_0 + 1) // Test relativo al evento de entrada
     expect(emitted.count).toBeTruthy() // Comprobamos que se emite el evento
     expect(emitted.count.length).toBe(1) // Comprobamos que se emite el evento una sola vez
     expect(emitted.count[0]).toEqual([wrapper.vm.count]) // Comprobamos los argumentos
@@ -557,11 +558,9 @@ describe(`@click | Cuando el usuario hace click en el botón`, () => {
 })
 ```
 
+> Se ha aprovechado el mismo test para no repetir la acción de montar el componente. Este test puede (y suele) hacerse en dos tests distintos, en cuyo caso no se podría reaprovechar el montado del componente (o habría que tener cuidado si se hace) porque si no utilizamos un `wrapper` nuevo para cada test, al estar emitiendo en el primero también, podríamos acabar con más eventos emitidos de los que esperamos. Por ello se recomienda volver a montar el componente, sobre todo si el test es más complejo que el del ejemplo.
+
 Es importante aquí también entender que los eventos se meten en la cola y no se liberan hasta el final del ciclo, por lo que es importante que utilicemos el `await wrapper.vm.$nextTick()`. Además, para los casos como este en los que es un evento de entrada el que provoca que se lance el evento que queremos probar, se recomienda utilizar el último método visto en la sección de **eventos de entrada** (utilizando el `wrapper.vm.$listeners`) ya que de no hacerlo tendríamos que poner otro `await wrapper.vm.$nextTick()` más, para esperar los dos retardos impuestos por el `$emit()`, en el evento de entrada y en el de salida.
-
-## TODO
-
-- Ejemplos de escuchar llamadas a apis
 
 [jest]: https://jestjs.io/en/
 
