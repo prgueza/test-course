@@ -3,14 +3,26 @@ import Counter from './Counter.vue'
 
 describe('Counter test suite', () => {
 
-  describe(`@click | Cuando el usuario hace click en el botón`, () => {
-    it('El contador incrementa su valor en 1', async () => {
+  const sampleInitialValue = 4
+  describe(`:initialValue | Cuando se pasa ${sampleInitialValue} como valor inicial`, () => {
+    const wrapper = shallowMount(Counter, { propsData: { initialValue: sampleInitialValue } })
+    it(`El valor del contador es ${sampleInitialValue}`, () => {
+      expect(wrapper.vm.count).toBe(sampleInitialValue)
+    })
+    it('El contador incrementa su valor en 1', () => {
+      const p = wrapper.find({ ref: 'count' }) // Buscamos el elemento donde debe pintarse
+      expect(Number(p.text())).toBe(sampleInitialValue) // Comprobamos que el texto coincide
+    })
+  })
+
+  describe(`:initialValue | Configuración de la prop`, () => {
+    it(`La prop tiene como valor por defecto 0 y es de tipo Number`, () => {
       const wrapper = shallowMount(Counter)
-      const counter_0 = wrapper.vm.counter // Valor del contador en el momento inicial
-      const button = wrapper.find({ ref: 'button' }) // Buscamos el botóno
-      button.trigger('click') // Provocamos el evento
-      // await wrapper.vm.$nextTick() // Esperamos al siguiente ciclo
-      expect(wrapper.vm.counter).toBe(counter_0 + 1) // Comprobamos el resultado
+      const prop = wrapper.vm.$options.props.initialValue
+      expect(prop.isRequired).toBeFalsy() // En nuestro caso no es obligatoria
+      expect(prop.default).toBe(0) // Tiene 0 como valor por defecto
+      expect(prop.type).toBe(Number) // Es de tipo Number
+      expect(prop.validator(-10)).toBe(false) // No admite números negativos
     })
   })
 

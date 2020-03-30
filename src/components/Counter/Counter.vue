@@ -1,6 +1,6 @@
 <template lang="pug">
   div
-    p {{ count }}
+    p(ref="count") {{ count }}
     button(@click="handleClick", ref="button") Incrementar valor
 </template>
 
@@ -18,17 +18,17 @@ export default {
 
   data() {
     return {
-      counter: 0
+      count: 0
     }
   },
 
   mounted () {
-    this.counter = this.initialValue
+    this.count = this.initialValue
   },
 
   methods: {
     handleClick () {
-      this.counter++
+      this.count++
       this.$emit('count', this.count)
     }
   }

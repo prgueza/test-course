@@ -17,11 +17,19 @@
 #### [Vue Test Utils](./docs/vue/vue.md)
 
 1.  Configuración avanzada de Jest
-2.  Estructura de los archivos de test
-3.  Métodos `mount()` y `shallowMount()`
-4.  El objeto `wrapper`
-5.  Buscando elementos del DOM
-6.  Mockeo de funciones en componentes
+2.  Métodos `mount()` y `shallowMount()`
+3.  El objeto `wrapper`
+4.  Buscando elementos del DOM
+5.  Mockeo de funciones en componentes
+
+#### [Metodología y estructura de los tests](./docs/methodology/methodology.md)
+
+1. Estructura de los archivos de Test
+2. Concepto de componente
+3. Concepto de contrato
+4. Estructura de un Test
+5. Snippets
+6. Casos prácticos más comunes
 
 ## Instalación
 

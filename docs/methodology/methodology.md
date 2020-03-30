@@ -1,6 +1,24 @@
-# Metodología y estructura de los tests
+# Estructura y metodología de los tests
 
 > Existen distintas formas de plantear los tests, pero aquí proponemos una de las más extendidas.
+
+## Estructura de los archivos de Test
+
+Si hemos configurado correctamente nuestro entorno de test, [Jest] se encargará de buscar los archivos correspondientes a la hora de lanzar los tests, por lo que es indiferente dónde dejemos estos archivos siempre y cuando estén dentro del scope que declaramos en la [configuración] de [Jest]. Se recomienda guardar los archivos de test junto con el archivo `.vue` del componente al que hacen referencia dentro de un mismo directorio bajo el nombre del componente. De esta forma tendremos los tests y los archivos del componente almacenados en un mismo directorio facilitando compartir nuestro componente y saber si dispone de tests o no.
+
+```fs
+  .
+  +-- src
+      +-- components
+      |   +-- component-a
+      |   |   +-- ComponentA.vue
+      |   |   +-- ComponentA.spec.js
+      |   +-- component-b
+      |   |   +-- ComponentB.vue
+      |   |   +-- ComponentB.spec.js
+      |   +-- ...
+      +-- ...
+```
 
 ## Concepto de Componente
 
@@ -49,7 +67,7 @@ Y como eventos de entrada (`@event`):
 ```html
 <template lang="html">
   <div>
-    <p> {{ count }} </p>
+    <p ref="count"> {{ count }} </p>
     <button @click="handleClick" ref="button"> Incrementar valor </button>
   </div>  
 </template>
@@ -69,17 +87,17 @@ export default {
 
   data() {
     return {
-      counter: 0
+      count: 0
     }
   },
 
   mounted () {
-    this.counter = this.initialValue
+    this.count = this.initialValue
   },
 
   methods: {
     handleClick () {
-      this.counter++
+      this.count++
       this.$emit('count', this.count)
     }
   }
@@ -262,6 +280,9 @@ describe(`:initialValue | Cuando se pasa ${sampleInitialValue} como valor inicia
 ```
 
 Otra alternativa será configurar el valor de esta `prop` una vez está montado el componente utilizando el método `setProps({ <prop>: <value> })` del `wrapper`.
+En el caso de nuestro componente, para que este test pasara sería necesario refactorizar el código y utilizar un `watch` para hacer la asignación de `initialValue` al `counter`. Tal y como está actualmente el componente (usando el `mounted`), el valor del `counter` solo se inicializa al montar el componente, por eso en el caso anterior sí funciona. En este, al modificar la propiedad una vez montado el componente (tras el `shallowMount`), el cambio no se verá reflejado.
+
+> Este test podría reaprovecharse para probar que en efecto una vez montado el componente no puede setearse el `counter` cambiando el `.toBe` por `.not.toBe`
 
 ```js
 const sampleInitialValue = 4
@@ -269,7 +290,7 @@ describe(`:initialValue | Cuando se pasa ${sampleInitialValue} como valor inicia
   it(`El valor del contador es ${sampleInitialValue}`, () => {
     const wrapper = shallowMount(Counter)
     wrapper.setProps({ initialValue: sampleInitialValue })
-    expect(wrapper.vm.counter).toBe(sampleInitialValue)
+    expect(wrapper.vm.count).toBe(sampleInitialValue)
   })
 })
 ```
@@ -312,10 +333,10 @@ La primera alternativa, si el evento a provocar es un evento nativo del navegado
 describe(`@click | Cuando el usuario hace click en el botón`, () => {
   it('El contador incrementa su valor en 1', () => {
     const wrapper = shallowMount(Counter)
-    const counter_0 = wrapper.vm.counter // Valor del contador en el momento inicial
+    const count_0 = wrapper.vm.count // Valor del contador en el momento inicial
     const button = wrapper.find({ ref: 'button' }) // Buscamos el botón
     button.trigger('click') // Provocamos el evento
-    expect(wrapper.vm.counter).toBe(counter_0 + 1) // Comprobamos el resultado
+    expect(wrapper.vm.count).toBe(counter_0 + 1) // Comprobamos el resultado
   })
 })
 ```
@@ -326,11 +347,11 @@ En este caso, al ser el botón un elemento html nativo, el evento se lanza autom
 describe(`@click | Cuando el usuario hace click en el botón`, () => {
   it('El contador incrementa su valor en 1', async () => {
     const wrapper = shallowMount(Counter)
-    const counter_0 = wrapper.vm.counter // Valor del contador en el momento inicial
+    const count_0 = wrapper.vm.count // Valor del contador en el momento inicial
     const button = wrapper.find({ ref: 'buttonOds' }) // Buscamos el botón
     button.trigger('click') // Provocamos el evento
     await wrapper.vm.$nextTick() // Ahora si es necesario esperar
-    expect(wrapper.vm.counter).toBe(counter_0 + 1) // Comprobamos el resultado
+    expect(wrapper.vm.count).toBe(counter_0 + 1) // Comprobamos el resultado
   })
 })
 ```
@@ -343,11 +364,11 @@ Para ello debemos usar el método `$emit()` del componente que emite el evento, 
 describe(`@click | Cuando el usuario hace click en el botón`, () => {
   it('El contador incrementa su valor en 1', async () => {
     const wrapper = shallowMount(Counter)
-    const counter_0 = wrapper.vm.counter // Valor del contador en el momento inicial
+    const count_0 = wrapper.vm.count // Valor del contador en el momento inicial
     const button = wrapper.find({ ref: 'buttonOds' }) // Buscamos el botón
     button.vm.$emit('custom-click-event') // Provocamos el evento personalizado
     await wrapper.vm.$nextTick() // Ahora también es necesario esperar
-    expect(wrapper.vm.counter).toBe(counter_0 + 1) // Comprobamos el resultado
+    expect(wrapper.vm.count).toBe(counter_0 + 1) // Comprobamos el resultado
   })
 })
 ```
@@ -356,9 +377,9 @@ Si queremos evitar esta espera existe una manera de hacerlo consistente en simul
 
 > Esto solo funciona cuando quien emite el evento es un componente de Vue, no cuando es una etiqueta html.
 
-Para ello hay que saber que al asociar un controlador a un evento a través del `@event="handler"` del componente, lo que hace Vue es guardar en el componente, dentro de un objeto `$listeners`, la referencia a ese controlador (de la forma `$listeners: { [event]: handler }`) para poder invocarlo desde dentro del mismo componente.
+Para ello hay que saber que al asociar un controlador a un evento a través de la sintaxis `@event="handler"` del componente, lo que hace Vue es guardar en el componente hijo, dentro de un objeto `$listeners`, la referencia a ese controlador (de la forma `$listeners: { [event]: handler }`) para poder invocarlo desde dentro del mismo componente.
 
-> El concepto de *emitir un evento* se utiliza para entender mejor la interacción entre componentes y el flujo de los datos, pero en realidad no es el hijo quién pasa datos al padre, si no que es el padre quien le pasa la función controlador al hijo para que la ejecute él.
+> El concepto de *emitir un evento* se utiliza para entender mejor la interacción entre componentes y el flujo de los datos, pero en realidad no es el hijo quién pasa datos al padre, si no que es el padre quien le pasa el controlador al hijo para que lo ejecute él.
 
 Este test podría entonces escribirse de la siguiente manera:
 
@@ -366,51 +387,56 @@ Este test podría entonces escribirse de la siguiente manera:
 describe(`@click | Cuando el usuario hace click en el botón`, () => {
   it('El contador incrementa su valor en 1', () => {
     const wrapper = shallowMount(Counter)
-    const counter_0 = wrapper.vm.counter // Valor del contador en el momento inicial
+    const count_0 = wrapper.vm.count // Valor del contador en el momento inicial
     const button = wrapper.find({ ref: 'buttonOds' }) // Buscamos el botón
     button.vm.$listeners.click() // Simulamos el evento
-    expect(wrapper.vm.counter).toBe(counter_0 + 1) // Comprobamos el resultado
+    expect(wrapper.vm.count).toBe(counter_0 + 1) // Comprobamos el resultado
   })
 })
 ```
 
 De esta forma no es necesario esperar al siguiente ciclo, ya que estamos invocando la función controlador directamente en vez de a través del `$emit()`, que es quién hace que se posponga la ejecución.
 
-Aunque parezca que nos estamos saltando un paso al invocar directamente el controlador (algo que podríamos hacer a través de `wrapper.vm.handleClick()`), esta forma de probar el componente es mucho más segura, ya que nos garantiza no sólo qeue el controlador existe, sino además que está bindeado con el componente que debe lanzarlo.
+Aunque parezca que nos estamos saltando un paso al invocar directamente el controlador (algo que podríamos hacer a través de `wrapper.vm.handleClick()`), esta forma de probar el componente es mucho más segura que lanzar el método controlador desde el propio componente padre, ya que nos garantiza no sólo que el controlador existe, sino además que está *bindeado* con el componente que debe lanzarlo.
 
 ### 3. Hmtl renderizado
 
+Una de las salidas del componente que seguramente necesitemos probar será el renderizado del html, que es el resultado de una combinación determinada de entradas. Las utilidades de [Vue Test Utils] nos permiten probar esta salida de varias formas con más o menos detalle. Un punto importante a tener en cuenta aquí es que el renderizado, al igual que la emisión de eventos, se realiza de forma asíncrona y al final de los ciclos del componente, con lo que en muchos casos sera necesario escribir el test de forma asíncrona.
+
+```js
+describe(`:initialValue | Cuando se pasa ${sampleInitialValue} como valor inicial`, () => {
+
+  const sampleInitialValue = 4
+  const wrapper = shallowMount(Counter, { propsData: { initialValue: sampleInitialValue } })
+
+  // it(`El valor del contador es ${sampleInitialValue}`, () => {
+  //   expect(wrapper.vm.counter).toBe(sampleInitialValue)
+  // })
+
+  it('El nuevo valor del contador se muestra donde corresponde', async () => {
+    await wrapper.vm.$nextTick()
+    const p = wrapper.find({ ref: 'count' }) // Buscamos el elemento donde debe pintarse
+    expect(p.text()).toBe(sampleInitialValue) // Comprobamos que el texto coincide
+  })
+
+})
+```
+
 en el caso de setProps tener en cuenta asincronia
+
+- texto renderizados
+- v-for de elementos con el wrapperArray
+- v-if con el exist
 
 ### 4. Emisión de eventos
 
 asincronia y asincronia doble si se hace el trigger
 
-## Estructura de los archivos de Test
-
-Si hemos configurado correctamente nuestro entorno de test, [Jest] se encargará de buscar los archivos correspondientes a la hora de lanzar los tests, por lo que es indiferente dónde dejemos estos archivos siempre y cuando estén dentro del scope que declaramos en la [configuración] de [Jest]. Se recomienda guardar los archivos de test junto con el archivo `.vue` del componente al que hacen referencia dentro de un mismo directorio bajo el nombre del componente. De esta forma tendremos los tests y los archivos del componente almacenados en un mismo directorio facilitando compartir nuestro componente y saber si dispone de tests o no.
-
-```fs
-  .
-  +-- src
-      +-- components
-      |   +-- component-a
-      |   |   +-- ComponentA.vue
-      |   |   +-- ComponentA.spec.js
-      |   +-- component-b
-      |   |   +-- ComponentB.vue
-      |   |   +-- ComponentB.spec.js
-      |   +-- ...
-      +-- ...
-```
 
 ### Casos
 
 - Ejemplos con entrada de prop
   - renderizacion de html
-
-- Ejemplos de eventos de usuario  
-  - formas de hacer un trigger (trigger, emmit, listener)
 
 - Ejemplos de escuchar eventos de salida
 - Ejemplos de escuchar llamadas a apis
@@ -420,6 +446,8 @@ Si hemos configurado correctamente nuestro entorno de test, [Jest] se encargará
 [cli]: https://jestjs.io/docs/en/cli
 
 [@vue/test-utils]: https://github.com/vuejs/vue-test-utils
+
+[Vue Test Utils]: https://vue-test-utils.vuejs.org/
 
 [vue-jest]: https://github.com/vuejs/vue-jest
 
