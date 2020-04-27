@@ -22,6 +22,7 @@ También es necesario añadir una serie de modificaciones en el archivo de confi
 +   moduleFileExtensions: ['js', 'vue'],
     moduleNameMapper: {
       '^@/(.*)$': '<rootDir>/$1',
++     '.+\\.(css|styl|less|sass|scss|png|jpg|svg|ttf|woff|woff2)$': 'jest-transform-stub',
     },
     transform: {
       '^.+\\.js$': 'babel-jest',
@@ -35,6 +36,12 @@ También es necesario añadir una serie de modificaciones en el archivo de confi
     verbose: true,
   }
 ```
+
+-   `moduleNameMapper`
+
+    Este nuevo module mapper es importante ya que remplaza nuestros imports de assets (como por ejemplo las imágenes, o las fuentes) en nuestros componentes de forma que no entren en conflicto con la ejecución de nuestros tests.
+
+    > Para utilizar este module mapper es necesario tenerlo instalado en nuestro proyecto. Puede instalarse mediante el comando `npm install --save-dev jest-transform-stub`
 
 -   `moduleFileExtensions`
 

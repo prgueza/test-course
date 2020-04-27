@@ -341,7 +341,7 @@ describe(`@click | Cuando el usuario hace click en el botón`, () => {
 })
 ```
 
-En este caso, al ser el botón un elemento html nativo, el evento se lanza automáticamente sin estar controlado por el ciclo de vida del Vue, con lo que no hace falta esperar. Si el botón fuera un componente como el `ods-button`, el evento pasaría por este componente y el `$emit()` sería pospuesto hasta el final del ciclo, con lo que se haría necesario esperar.
+En este caso, al ser el botón un elemento html nativo, el evento se lanza automáticamente sin estar controlado por el ciclo de vida de Vue, con lo que no hace falta esperar. Si el botón fuera un componente como el `ods-button`, el evento pasaría por este componente y el `$emit()` sería pospuesto hasta el final del ciclo, con lo que se haría necesario esperar.
 
 ```js
 describe(`@click | Cuando el usuario hace click en el botón`, () => {
