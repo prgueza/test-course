@@ -2,7 +2,7 @@
 
 > Existen distintas formas de plantear los tests, pero aquí proponemos una de las más extendidas.
 
-## Estructura de los archivos de Test
+## 1. Estructura de los archivos de Test
 
 Si hemos configurado correctamente nuestro entorno de test, [Jest] se encargará de buscar los archivos correspondientes a la hora de lanzar los tests, por lo que es indiferente dónde dejemos estos archivos siempre y cuando estén dentro del scope que declaramos en la [configuración] de [Jest]. Se recomienda guardar los archivos de test junto con el archivo `.vue` del componente al que hacen referencia dentro de un mismo directorio bajo el nombre del componente. De esta forma tendremos los tests y los archivos del componente almacenados en un mismo directorio facilitando compartir nuestro componente y saber si dispone de tests o no.
 
@@ -20,7 +20,7 @@ Si hemos configurado correctamente nuestro entorno de test, [Jest] se encargará
       +-- ...
 ```
 
-## Concepto de Componente
+## 2. Concepto de Componente
 
 Antes de empezar a definir una metodología es necesario entender en profundidad lo que es un componente y qué características comunes comparten todos los componentes que utilizamos dentro de nuestras apps.
 
@@ -42,7 +42,7 @@ El componente para el desarrollador que lo utiliza es una **caja negra** con la 
 
 ![contrato](./img/blackbox.png)
 
-## Concepto de Contrato
+## 3. Concepto de Contrato
 
 Por eso lo importante para garantizar que un componente funciona como debería y como se espera no es la lógica que determina su comportamiento, si no el **contrato** que se establece en la **API**, y es esto lo que se debe probar.
 
@@ -117,7 +117,7 @@ Este conjunto de reglas definen la **interfaz** de nuestro componente y es el **
 
 Podríamos refactorizar el componente y sacar el `this.$emit('count', this.count)` a otro método que se invocaría desde el `handleClick` y al seguirse cumpliendo el contrato el test debería seguir dando un resultado positivo. La **interfaz** del componente no se ve alterada por esta modificación, con lo que no hay motivo para que el test falle, ningún usuario que esté utilizando este componente va a notar este cambio, ya que la funcionalidad se mantiene.
 
-## Estructura de un Test
+## 4. Estructura de un Test
 
 Una vez tenemos definido el conjunto de reglas que conforman el **contrato** de nuestro componente es muy sencillo organizar el archivo de test acorde a estas reglas. Además la sintaxis de [Jest] ayuda a traducir la regla a un test.
 
@@ -187,7 +187,7 @@ A la hora de estructurar un test damos una serie de recomendaciones que es conve
 
   > Se entiende mejor qué función cumple esta línea de código `const animalNames = animals.map(animal => animal.name)` que esta otra `const n = arr.map(a => a.name)`.
 
-### Snippets
+### 4.1 Snippets
 
 Para facilitar el desarrollo de los tests hemos preparado una serie de [snippets](../../snippets) que aceleran el trabajo garantizando además que se cumplen estas recomendaciones.
 
@@ -246,7 +246,7 @@ Para facilitar el desarrollo de los tests hemos preparado una serie de [snippets
 
   > Aquí el primer <kbd>⇥ Tab</kbd> nos lleva al placeholder *behaviour* y el segundo al cuerpo del test.
 
-## Casos prácticos más comunes
+## 5. Casos prácticos más comunes
 
 En este apartado detallamos los casos prácticos más comunes que aparecen a la hora de probar nuestros componentes. Los hemos dividido en cuatro apartados, dos para las **entradas** (propiedades y eventos de entrada) y dos para las **salidas** (html renderizado y eventos emitidos).
 
@@ -263,7 +263,7 @@ En la mayoría de los casos utilizaremos como ejemplo el componente contador que
 3. **Cuando** el usuario hace click en el botón, se **espera** que el contador incremente su valor en **1** (y además se mueste este nuevo valor en la pantalla).
 4. **Cuando** el usuario hace click en el botón, se **espera** que el contador emita un **evento** llamado *count* con el nuevo valor del contador.
 
-### 1. Props
+### 5.1. Props
 
 Existen dos formas de configurar las props de nuestro componente para generar los distintos casos de uso que tiene este. En el caso del contador, que admite la prop `initialValue`, si queremos probar la segunda regla, debemos encontrar la forma de inicializar esta propiedad para probar el comportamiento del componente en este caso.
 
@@ -314,7 +314,7 @@ describe(`:initialValue | Configuración de la prop`, () => {
 
 Es importante hacer este tipo de comprobaciones porque son las que defienden al desarrollador de utilizar de forma incorrecta el componente sin darse cuenta. Además son parte del contrato. Si planteamos que la `prop` es obligatoria, en nuestros tests no vamos a probar casos en los que la `prop` no esté definida, porque es obligatoria. Por lo que si alguien quita la propiedad `required` de la configuración de la `prop` por accidente, el test no se dará cuenta, y además hemos perdido el aviso que da Vue cuando no configuras las `props` obligatorias de un componente.
 
-### 2. Eventos de entrada
+### 5.2. Eventos de entrada
 
 Existen varias formas de provocar un evento de entrada, y hay que considerar el caso especial en que el evento de entrada llega a través del `EventsBus`. También es importante aquí entender de qué forma gestiona Vue los eventos y cómo es el ciclo de trabajo que gestiona el comportamiento de un componente.
 
@@ -399,7 +399,7 @@ De esta forma no es necesario esperar al siguiente ciclo, ya que estamos invocan
 
 Aunque parezca que nos estamos saltando un paso al invocar directamente el controlador (algo que podríamos hacer a través de `wrapper.vm.handleClick()`), esta forma de probar el componente es mucho más segura que lanzar el método controlador desde el propio componente padre, ya que nos garantiza no sólo que el controlador existe, sino además que está *bindeado* con el componente que debe lanzarlo.
 
-### 3. Hmtl renderizado
+### 5.3. Hmtl renderizado
 
 Una de las salidas del componente que seguramente necesitemos probar será el renderizado del html que sea el resultado de una combinación determinada de entradas. Las utilidades de [Vue Test Utils] nos permiten probar esta salida de varias formas con más o menos detalle. Un punto importante a tener en cuenta aquí es que el renderizado, al igual que la emisión de eventos, se realiza de forma asíncrona y al final de los ciclos del componente, con lo que en muchos casos sera necesario escribir el test de forma asíncrona.
 
@@ -486,7 +486,7 @@ Cuando esperamos que la búsqueda devuelva más de un elemento debemos usar el m
 
 El motivo por el cual en el segundo test es necesario esperar al siguiente ciclo para hacer la comprobación es que, mientras que en el primero la prop se configura en el `shallowMount()` (que devuelve el wrapper con el renderizado actualizado), en el segundo estamos configurando las props a posteriori, con lo que tenemos que esperar a que se lance la actualización del renderizado antes de poder hacer la comprobación.
 
-### 4. Emisión de eventos
+### 5.4. Emisión de eventos
 
 Otro caso de uso común es probar que nuestro componente emite eventos con parámetros determinados y en un orden concreto. La principal herramienta para este tipo de tests son los métodos `emitted` y `emittedByOrder` de nuestro `wrapper`. La diferencia entre estos dos métodos es el resultado que devuelven, y la elección de cual usar según qué caso depende de este resultado.
 
@@ -563,59 +563,31 @@ describe(`@click | Cuando el usuario hace click en el botón`, () => {
 Es importante aquí también entender que los eventos se meten en la cola y no se liberan hasta el final del ciclo, por lo que es importante que utilicemos el `await wrapper.vm.$nextTick()`. Además, para los casos como este en los que es un evento de entrada el que provoca que se lance el evento que queremos probar, se recomienda utilizar el último método visto en la sección de **eventos de entrada** (utilizando el `wrapper.vm.$listeners`) ya que de no hacerlo tendríamos que poner otro `await wrapper.vm.$nextTick()` más, para esperar los dos retardos impuestos por el `$emit()`, en el evento de entrada y en el de salida.
 
 [jest]: https://jestjs.io/en/
-
 [cli]: https://jestjs.io/docs/en/cli
-
 [@vue/test-utils]: https://github.com/vuejs/vue-test-utils
-
 [Vue Test Utils]: https://vue-test-utils.vuejs.org/
-
 [vue-jest]: https://github.com/vuejs/vue-jest
-
 [configuración]: https://jestjs.io/docs/en/configuration
-
 [babel]: https://babeljs.io/
-
 [babel-jest]: https://www.npmjs.com/package/babel-jest
-
 [describe]: https://jestjs.io/docs/en/api#describename-fn
-
 [test]: https://jestjs.io/docs/en/api#testname-fn-timeout
-
 [expect]: https://jestjs.io/docs/en/expect
-
 [test-each]: https://jestjs.io/docs/en/api#testeachtablename-fn-timeout
-
 [jest mock functions]: https://jestjs.io/docs/en/mock-function-api
-
 [tohavebeencalled]: https://jestjs.io/docs/en/expect#tohavebeencalled
-
 [tohavebeencalledwith]: https://jestjs.io/docs/en/expect#tohavebeencalledwitharg1-arg2
-
 [mockimplementation]: https://jestjs.io/docs/en/mock-function-api#mockfnmockimplementationfn
-
 [jsdom]: https://github.com/jsdom/jsdom
-
 [vue mount]: https://vue-test-utils.vuejs.org/api/mount.html
-
 [vue shallowmount]: https://vue-test-utils.vuejs.org/api/shallowMount.html
-
 [instrucciones]: https://vue-test-utils.vuejs.org/guides/testing-single-file-components-with-jest.html
-
 [createLocalVue]: https://vue-test-utils.vuejs.org/api/createLocalVue.html
-
 [mounting options]: https://vue-test-utils.vuejs.org/api/options.html
-
 [selector]: https://vue-test-utils.vuejs.org/api/selectors.html
-
 [WrapperArray]: https://vue-test-utils.vuejs.org/api/wrapper-array/
-
 [setChecked]: https://vue-test-utils.vuejs.org/api/wrapper/#setchecked
-
 [setSelected]: https://vue-test-utils.vuejs.org/api/wrapper/#setselected
-
 [sencillos]: https://en.wikipedia.org/wiki/KISS_principle
-
 [cola de actualización]: https://vuejs.org/v2/guide/reactivity.html#Async-Update-Queue
-
 [Snapshots]: https://jestjs.io/docs/en/snapshot-testing#snapshot-testing-with-jest
