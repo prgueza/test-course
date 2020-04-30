@@ -18,7 +18,9 @@
 
 1.  Configuración avanzada de Jest
 2.  Montado de componentes
-3.  El objeto `wrapper`
+3.  Opciones de los métodos mount y shallowMount
+4.  El objeto `wrapper`
+5.  Métodos del objeto wrapper
 
 #### [Metodología y estructura de los tests](./docs/methodology/methodology.md)
 

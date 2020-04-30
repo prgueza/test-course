@@ -96,7 +96,7 @@ test('Renders a button element', () => {
 
 > Puede encontrar más ejemplos y documentación más detallada del metodo `shallowMount()` en [este enlace][vue shallowmount].
 
-### 2.1 Opciones de los métodos `mount` y `shallowMount`
+## 3 Opciones de los métodos `mount` y `shallowMount`
 
 A la hora de montar un componente, los métodos `mount` y `shallowMount` nos permiten especificar una serie de opciones que valdrán como condiciones iniciales del montado del componente.
 
@@ -108,14 +108,14 @@ const wrapper = mount(<Component>, { ...options })
 
 Aquí exponemos las opciones más utilizadas, pero una lista completa de estas opciones puede encontrarse en [este enlace][mounting options].
 
-- [`localVue`](#localVue)
-- [`data`](#data)
-- [`propsData`](#propsData)
-- [`mocks`](#mocks)
-- [`methods`](#methods)
-- [`slots`](#slots)
+- [`localVue`](#3.1-localVue)
+- [`data`](#3.1-data)
+- [`propsData`](#3.3-propsData)
+- [`mocks`](#3.4-mocks)
+- [`methods`](#3.5-methods)
+- [`slots`](#3.6-slots)
 
-#### 2.1.1 `localVue`
+### 3.1 `localVue`
 
 Esta opción nos permite definir una copia local de la instancia original de vue creada con [`createLocalVue`][createLocalVue] para usarla al montar el componente. Es útil para instalar plugins de Vue que solo usa esta componente en esta copia, ya que de esta forma no ensuciamos la instancia de Vue global que comparten todos los componentes.
 
@@ -137,7 +137,7 @@ const wrapper = mount(Component, {
 expect(wrapper.vm.$route).toBeInstanceOf(Object)
 ````
 
-#### 2.1.2 `data`
+### 3.2 `data`
 
 Mediante esta opción podemos inicializar valores del data antes del montado del componete. Estos valores se fusionaran con los ya existenes, es decir, cambiará el valor del data del componente si este exite y si no existe lo creará.
 
@@ -170,7 +170,7 @@ wrapper.find('#foo').text() // 'foo'
 wrapper.find('#bar').text() // 'my-override'
 ```
 
-#### 2.1.3 `propsData`
+### 3.3 `propsData`
 
 Esta opción nos permite setear las props del componente antes de montarlo. Esto equivale a tener props por defecto, de forma que en el momento del primer montado el componente ya dispone de estos valores para el renderizado.
 
@@ -189,7 +189,7 @@ const wrapper = mount(Component, {
 expect(wrapper.text()).toBe('foo')
 ```
 
-#### 2.1.4 `mocks`
+### 3.4 `mocks`
 
 Mediante esta opción podemos agregar propiedades adicionales a la instancia de Vue. Esto es útil para reemplazar métodos globales que en el momento del test no queramos que ejecuten el verdadero código.
 
@@ -208,7 +208,7 @@ const wrapper = shallowMount(Component, {
 expect(wrapper.vm.$route.path).toBe($route.path)
 ```
 
-#### 2.1.5 `methods`
+### 3.5 `methods`
 
 Es posible que en algún test necesitemos reemplazar alguno de los métodos de nuestro componente por otro (generalmente por una `jest.fn` que podamos observar).
 
@@ -224,7 +224,7 @@ const wrapper = mount(Component, {
 expect(serviceCallMock).toHaveBeenCalledWith('params')
 ```
 
-#### 2.1.6 `slots`
+### 3.6 `slots`
 
 Nos permite definir mediante un objeto el contenido que debería mostrarse en los diferentes slots de los que dispone nuestro componente. Se configura mediante un objeto donde la clave de las propiedades corresponde con el nombre de los slots, y el valor de cada propiedad corresponde con el contenido.
 
@@ -254,7 +254,7 @@ const wrapper = mount(ComponentWithSlot, {
 expect(wrapper.text()).toContain(slotContent)
 ```
 
-## 3. El objeto `wrapper`
+## 4. El objeto `wrapper`
 
 El `wrapper` es un objeto que podemos utilizar para referenciar nuestro componente y que nos aporta una serie de métodos para facilitar nuestras comprobaciones. Entre sus propiedades tenemos: disponible la instancia de vue del componente (`wrapper.vm`).
 
@@ -266,28 +266,28 @@ El `wrapper` es un objeto que podemos utilizar para referenciar nuestro componen
 
   El nodo DOM raiz del wrapper.
 
-### 3.1 Métodos del objeto `wrapper`
+### 5. Métodos del objeto `wrapper`
 
 El `wrapper` nos aporta una serie de métodos que funcionan sobre el componente que genera dicho wrapper y que nos permiten acceder a métodos, propiedades, atributos, el html renderizado, etc. Estos métodos son los que se utilizan para hacer las comprobaciones del funcionamiento del componente.
 
 De nuevo, aquí detallamos los métodos más utilizados, pero puede consultarse la lista completa de métodos [en este enlace][wrapper-methods].
 
-- [`attributes()`](#attributes())
-- [`classes()`](#classes())
-- [`contains()`](#contains())
-- [`emitted()`](#emitted())
-- [`emmitedByOrder()`](#emmitedByOrder())
-- [`exists()`](#exists())
-- [`find() y findAll()`](#find()-y-findAll())
-- [`isEmpty()`](#isEmpty())
-- [`isVisible()`](#isVisible())
-- [`setData()`](#setData())
-- [`setProps()`](#setProps())
-- [`setValue()`](#setValue())
-- [`text()`](#text())
-- [`trigger()`](#trigger())
+- [`attributes()`](#5.1-attributes())
+- [`classes()`](#5.2-classes())
+- [`contains()`](#5.3-contains())
+- [`emitted()`](#5.4-emitted())
+- [`emmitedByOrder()`](#5.5-emmitedByOrder())
+- [`exists()`](#5.6-exists())
+- [`find() y findAll()`](#5.7-find()-y-findAll())
+- [`isEmpty()`](#5.8-isEmpty())
+- [`isVisible()`](#5.9-isVisible())
+- [`setData()`](#5.10-setData())
+- [`setProps()`](#5.11-setProps())
+- [`setValue()`](#5.12-setValue())
+- [`text()`](#5.13-text())
+- [`trigger()`](#5.14-trigger())
 
-#### 3.1.1 `attributes()`
+### 5.1 `attributes()`
 
 El método `attributes()` devuelve en un objeto los atributos del nodo del DOM del `wrapper` en cuestión. Se puede pasar como parametro la `key` del atributo cuyo valor quermos obtener.
 
@@ -297,7 +297,7 @@ expect(wrapper.attributes().id).toBe('foo') // attributes() devuelve el objeto {
 expect(wrapper.attributes('id')).toBe('foo') // attributes('id') devuelve directamente el valor 'foo'
 ```
 
-#### 3.1.2 `classes()`
+### 5.2 `classes()`
 
 Devuelve en un array las clases del nodo del DOM del `wrapper`. Del mismo modo que con los atributos podemos utilizar el nombre de la clase como parámetro para comprobar si el componente dispone de la clase o no.
 
@@ -307,7 +307,7 @@ expect(wrapper.classes()).toContain('bar') // classes() devuelve el array ['bar'
 expect(wrapper.classes('bar')).toBe(true) // classes('bar') devuelve true si el componente tiene la clase 'bar'
 ```
 
-#### 3.1.3 `contains()`
+### 5.3 `contains()`
 
 Devuelve si el `wrapper` contiene o no el elemento buscado por el [selector][selector] especificado.
 
@@ -317,7 +317,7 @@ expect(wrapper.contains('p')).toBe(true)
 expect(wrapper.contains(Bar)).toBe(true)
 ```
 
-#### 3.1.4 `emitted()`
+### 5.4 `emitted()`
 
 El método `emitted` devuelve un **Objeto** con los distintos eventos que ha emitido nuestro componente. Dentro de este objeto, las claves serán el nombre de los distintos eventos que ha emitido, y el valor de cada clave será un **Array** con un elemento por cada emisión del evento, donde cada elemento es a su vez otro **Array** que contiene los argumentos que se han usado a la hora de emitir este evento.
 
@@ -345,7 +345,7 @@ Con este resultado no somos capaces de saber si el primer evento en lanzarse ha 
 
 Esto significa que cuando el orden en que se emiten **distintos** eventos importa y es algo que queremos probar, el método `emitted()` no nos sirve. En general esto no suele ser un problema, y este método funciona para cualquier otro caso. Si que nos sirve, por ejemplo, para saber cuántas veces se ha llamado el **evento A** (usando `emitted('evento A').length` o `emitted()['evento A'].length`), o para saber con qué argumentos se ha llamado el **evento A** por segunda vez (usando `emitted('evento A')[1]`).
 
-#### 3.1.5 `emittedByOrder`
+### 5.5 `emittedByOrder`
 
 El método `emittedByOrder` devuelve un **Array** donde cada elemento es un evento lanzado por el componente (sin agrupar por nombre) en forma de **Objeto** donde se especifica el nombre y los argumentos de ese evento.
 
@@ -362,7 +362,7 @@ wrapper.emittedByOrder() === [
 
 De esta forma, los eventos quedan ordenados, y podemos comprobar cuál ha sido el primer evento en lanzarse y en qué orden se han lanzado los distintos eventos a lo largo de un test.
 
-#### 3.1.6 `exists()`
+### 5.6 `exists()`
 
 Devuelve si el `Wrapper` o el `WrapperArray` existe.
 
@@ -374,7 +374,7 @@ expect(wrapper.findAll('div').exists()).toBe(true)
 expect(wrapper.findAll('does-not-exist').exists()).toBe(false)
 ```
 
-#### 3.1.7 `find()` y `findAll()`
+### 5.7 `find()` y `findAll()`
 
 El método `find()` devuelve el `wrapper` del primer elemento del DOM o componente Vue que coincida con el [selector][selector] pasado como argumento. El método `findAll()` funciona de la misma forma pero devuelve un `wrapperArray` que contiene todos los elementos del DOM o componentes que coinciden con el selector.
 
@@ -397,7 +397,7 @@ const divs = wrapper.findAll('div') // Devuelve un array de wrappers
 expect(div.length).toBe(4)
 ```
 
-#### 3.1.8 `isEmpty()`
+### 5.8 `isEmpty()`
 
 El método `isEmpty()` devolverá true si el `wrapper` no contiene elementos hijos ni texto.
 
@@ -406,7 +406,7 @@ const wrapper = mount(Foo)
 expect(wrapper.isEmpty()).toBe(true)
 ```
 
-#### 3.1.9 `isVisible()`
+### 5.9 `isVisible()`
 
 El método `isVisible()` devolverá true si el 'Wrapper' es visible. Comprueba además que los elementos ancestros no tengan ni `display: none` ni `visibility: hidden` para verificar que el `wrapper` es visible. Este método es útil para comprobar que se está aplicando la directiva `v-show` en componentes.
 
@@ -419,7 +419,7 @@ expect(wrapper.isVisible()).toBe(true)
 expect(wrapper.find('.is-not-visible').isVisible()).toBe(false)
 ```
 
-#### 3.1.10 `setData()`
+### 5.10 `setData()`
 
 El método `setData()` nos permite setear el data de nuestro componente tras haberlo montado. Esto puede ser utilizado para simular cambios en las propiedades del data que deban desencadenar alguna acción que podamos comprobar. El método `setData` usa internamente `Vue.set` y es importante tener en cuenta que si el cambio tiene algun efecto reactivo sobre el componente será necesario esperar al siguiente tick para hacer las comprobaciones de manera que puedan verse los efectos utilizando `await wrapper.vm.$nextTick()`.
 
@@ -429,7 +429,7 @@ wrapper.setData({ foo: 'bar' })
 expect(wrapper.vm.foo).toBe('bar')
 ```
 
-#### 3.1.11`setProps()`
+### 5.11`setProps()`
 
 Del mismo modo que el método `setData()` nos permite setear el data a posteriori, el método `setProps()` setea propiedeades y fuerza la actualización del componente si el cambio tiene algún efecto reactivo. Esto significa que hay que tener las mismas consideraciones que se tienen al utilizar el método `setData()`
 
@@ -439,7 +439,7 @@ wrapper.setProps({ foo: 'bar' })
 expect(wrapper.vm.foo).toBe('bar')
 ```
 
-#### 3.1.12 `setValue()`
+### 5.12 `setValue()`
 
 Setea el valor de un input o seleciona un elemento y actualiza el data asociado al `v-model`. Este método es muy útil cuando queremos simular la interacción de un usuario con un formulario de nuestra aplicación.
 
@@ -452,7 +452,7 @@ select.setValue('option value')
 
 Existen otros métodos similares como el [setChecked][setChecked] o el [setSelected][setSelected].
 
-#### 3.1.13 `text()`
+### 5.13 `text()`
 
 El método `text()` devuelve el contenido de texto del `wrapper`.
 
@@ -461,7 +461,7 @@ const wrapper = mount(Foo)
 expect(wrapper.text()).toBe('bar')
 ```
 
-#### 3.1.14 `trigger()`
+### 5.14 `trigger()`
 
 Lanza un evento del nodo DOM del `wrapper` de forma asíncrona.
 
