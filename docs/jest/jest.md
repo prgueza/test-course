@@ -128,7 +128,7 @@ module.exports = {
 
 ## 3. Lanzar un test e interpretar los resultados
 
-Cuando se ejecuta un test se pueden visualizar los resultados en la terminal y hay que saber interpretar los datos que se aparecen.
+Cuando se ejecuta un test se pueden visualizar los resultados en la terminal y hay que saber interpretar los datos que se muestran.
 
 ```sh
 > test-course@1.0.0 unit /.../front:ux/test-course
@@ -185,7 +185,7 @@ Ran all test suites.
 
 ```
 
-En este caso se está lanzando una sola suite de tests. Una suite es un archivo donde hemos definido una serie de tests para un componente. En este caso se trata de un archivo con el nombre `functions.js` donde se encuentran varias funciones (`multiply`, `divide`, `sum` y `compute`).
+En este caso se está lanzando una sola suite de tests. Una suite es un archivo donde hemos definido una serie de tests para un componente. Aquí se trata de un archivo con el nombre `functions.js` donde se encuentran varias funciones (`multiply`, `divide`, `sum` y `compute`).
 
 Para cada función se han definido una serie de tests que comprueban que éstas funcionan como se espera que funcionen.
 
@@ -209,7 +209,7 @@ La tabla de la parte inferior muestra el **nivel de cobertura** de nuestro códi
 
 - **Lines** - `% Lines`
 
-  Porcentaje de líneas que han sido interpretadas durante los tests. La diferencia entre este indicador y el de *Statements* está en que hay casos en los que en una línea se interpreta más de una órden.
+  Porcentaje de líneas que han sido interpretadas durante los tests. La diferencia entre este indicador y el de *Statements* está en que hay casos en los que en una línea se interpreta más de una orden.
 
   Por ejemplo, para el siguiente caso, si nuestro test no contempla el caso en que `value` sea `falsy`, la línea será interpretada, (por lo que la cobertura en líneas puede alcanzar el 100%), pero el statement `return false` no llega a ejecutarse (por lo que la cobertura en statements no podrá alcanzar el 100%).
 

@@ -17,10 +17,8 @@
 #### [Vue Test Utils](./docs/vue/vue.md)
 
 1.  Configuración avanzada de Jest
-2.  Métodos `mount()` y `shallowMount()`
+2.  Montado de componentes
 3.  El objeto `wrapper`
-4.  Buscando elementos del DOM
-5.  Mockeo de funciones en componentes
 
 #### [Metodología y estructura de los tests](./docs/methodology/methodology.md)
 
