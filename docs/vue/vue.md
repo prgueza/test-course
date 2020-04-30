@@ -96,7 +96,7 @@ test('Renders a button element', () => {
 
 > Puede encontrar más ejemplos y documentación más detallada del metodo `shallowMount()` en [este enlace][vue shallowmount].
 
-## 3 Opciones de los métodos `mount` y `shallowMount`
+## 3. Opciones de los métodos `mount` y `shallowMount`
 
 A la hora de montar un componente, los métodos `mount` y `shallowMount` nos permiten especificar una serie de opciones que valdrán como condiciones iniciales del montado del componente.
 
@@ -108,12 +108,12 @@ const wrapper = mount(<Component>, { ...options })
 
 Aquí exponemos las opciones más utilizadas, pero una lista completa de estas opciones puede encontrarse en [este enlace][mounting options].
 
-- [`localVue`](#3.1-localVue)
-- [`data`](#3.1-data)
-- [`propsData`](#3.3-propsData)
-- [`mocks`](#3.4-mocks)
-- [`methods`](#3.5-methods)
-- [`slots`](#3.6-slots)
+- [`localVue`](#31-localvue)
+- [`data`](#31-data)
+- [`propsData`](#3.3-propsdata)
+- [`mocks`](#34-mocks)
+- [`methods`](#35-methods)
+- [`slots`](#36-slots)
 
 ### 3.1 `localVue`
 
@@ -266,26 +266,26 @@ El `wrapper` es un objeto que podemos utilizar para referenciar nuestro componen
 
   El nodo DOM raiz del wrapper.
 
-### 5. Métodos del objeto `wrapper`
+## 5. Métodos del objeto `wrapper`
 
 El `wrapper` nos aporta una serie de métodos que funcionan sobre el componente que genera dicho wrapper y que nos permiten acceder a métodos, propiedades, atributos, el html renderizado, etc. Estos métodos son los que se utilizan para hacer las comprobaciones del funcionamiento del componente.
 
 De nuevo, aquí detallamos los métodos más utilizados, pero puede consultarse la lista completa de métodos [en este enlace][wrapper-methods].
 
-- [`attributes()`](#5.1-attributes())
-- [`classes()`](#5.2-classes())
-- [`contains()`](#5.3-contains())
-- [`emitted()`](#5.4-emitted())
-- [`emmitedByOrder()`](#5.5-emmitedByOrder())
-- [`exists()`](#5.6-exists())
-- [`find() y findAll()`](#5.7-find()-y-findAll())
-- [`isEmpty()`](#5.8-isEmpty())
-- [`isVisible()`](#5.9-isVisible())
-- [`setData()`](#5.10-setData())
-- [`setProps()`](#5.11-setProps())
-- [`setValue()`](#5.12-setValue())
-- [`text()`](#5.13-text())
-- [`trigger()`](#5.14-trigger())
+- [`attributes()`](#51-attributes())
+- [`classes()`](#52-classes())
+- [`contains()`](#53-contains())
+- [`emitted()`](#54-emitted())
+- [`emmitedByOrder()`](#55-emmitedbyorder())
+- [`exists()`](#56-exists())
+- [`find() y findAll()`](#57-find()-y-findAll())
+- [`isEmpty()`](#58-isempty())
+- [`isVisible()`](#59-isvisible())
+- [`setData()`](#510-setdata())
+- [`setProps()`](#511-setprops())
+- [`setValue()`](#512-setvalue())
+- [`text()`](#513-text())
+- [`trigger()`](#514-trigger())
 
 ### 5.1 `attributes()`
 
