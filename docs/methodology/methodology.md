@@ -125,20 +125,20 @@ Por ejemplo, para la primera regla que hemos definido, el test podría ser el si
 
 - **Cuando** no se pasa un valor inicial al contador a través de la propiedad `initialValue` se **espera** que el valor del contador sea **0**.
 
-```js
-describe(':initialValue | Cuando no se pasa un valor a initialValue', () => {
-  it('El valor del contador es 0', () => {
-    ...
-    expect(wrapper.vm.counter).toBe(0)
+  ```js
+  describe(':initialValue | Cuando no se pasa un valor a initialValue', () => {
+    it('El valor del contador es 0', () => {
+      ...
+      expect(wrapper.vm.counter).toBe(0)
+    })
   })
-})
-```
+  ```
 
-- `describe` está **describiendo** el caso de uso definido en la regla.
-- `it` es el propio componente, quién **inicializa** el valor del contador.
-- `expect` es el comportamiento que **se espera** del componente.
+  - `describe` está **describiendo** el caso de uso definido en la regla.
+  - `it` es el propio componente, quién **inicializa** el valor del contador.
+  - `expect` es el comportamiento que **se espera** del componente.
 
-> `it` es un alias para `test`. La documentación de [Jest] utiliza `test`, y en la mayoría de los ejemplos veremos que se utiliza `test`, pero para explicar cómo se relaciona la regla con el test `it` resulta más apropiado para entender que es el componente quien se encarga de cumplir la regla.
+  > `it` es un alias para `test`. La documentación de [Jest] utiliza `test`, y en la mayoría de los ejemplos veremos que se utiliza `test`, pero para explicar cómo se relaciona la regla con el test `it` resulta más apropiado para entender que es el componente quien se encarga de cumplir la regla.
 
 A la hora de estructurar un test damos una serie de recomendaciones que es conveniente seguir, ya que facilitan la colaboración en los archivos de test y ayudan a que el desarrollador que ve el componente por primera vez pueda entender su funcionamiento leyendo la suite de tests que se han desarrollado para éste.
 

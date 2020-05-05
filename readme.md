@@ -22,6 +22,12 @@
 4.  El objeto `wrapper`
 5.  Métodos del objeto wrapper
 
+#### [Vue con Vuex](./docs/vuex/vuex.md)
+
+1.  Introducción
+2.  Testear componentes con Vuex
+3.  Testear módulos de Vuex 🚧
+
 #### [Metodología y estructura de los tests](./docs/methodology/methodology.md)
 
 1. Estructura de los archivos de Test
@@ -30,6 +36,8 @@
 4. Estructura de un Test
 5. Snippets
 6. Casos prácticos más comunes
+
+#### [FAQ y ejemplos](./docs/examples/examples.md) 🚧
 
 ## Instalación
 
